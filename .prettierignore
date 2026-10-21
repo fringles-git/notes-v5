@@ -6,3 +6,6 @@ pnpm-lock.yaml
 package-lock.json
 bun.lock
 routeTree.gen.ts
+# The Notes app keeps the compact style of its notes-v3 source (see AGENTS.md); vendor files are minified third-party code
+src/notes
+public/vendor

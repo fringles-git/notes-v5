@@ -17,7 +17,6 @@
     "rolldown": "1.2.1"
   },
   "dependencies": {
-    "@fontsource-variable/figtree": "^5.2.0",
     "@fontsource-variable/manrope": "^5.3.0",
     "@fontsource-variable/sora": "^5.3.0",
     "@fontsource-variable/work-sans": "^5.3.0",

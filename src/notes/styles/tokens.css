@@ -54,7 +54,8 @@
   /* One meaning per colour, everywhere — a colour never decorates:
      amber = create and pinned (the + and what it makes) · blue = selection, links · ink = focus, primary buttons, progress
      red = delete, recording · green = done, switched on · folder colours = organisation (kind tones borrow them: outline icons and tints) */
-  --color-accent: #f4c542;
+  --accent-amber: #f4c542; --accent-apricot: #f59e5b; --accent-lilac: #b9a2f5;   /* Réglages → Accent */
+  --color-accent: var(--accent-amber);
   --color-accent-deep: light-dark(#8c6600, #e0ac1c);   /* amber as ink (ticks, strokes, labels): ≥4.5:1; fills stay --color-accent */
   --color-accent-stroke: #d9a514;   /* the +'s own edge */
   --color-on-accent: #1a1608;
@@ -121,6 +122,8 @@
   --radius-island: calc(var(--radius-sm) + var(--space-1));   /* an island wraps its buttons with --space-1 */
   --radius-panel: calc(var(--radius-sm) + var(--space-2));    /* a menu wraps its rows with --space-2 */
   --radius-dock: var(--radius-island);   /* dock islands; a look may make them pills */
+  --radius-dock-btn: calc(var(--radius-dock) - var(--space-1));   /* concentric inside them: the tabs, the +, the search field */
+  --hairline: .5px;   /* every border on content and glass */
 
   /* Layers: named, from the page up — nothing else picks a z-index */
   --z-base: 0;
@@ -134,7 +137,7 @@
 
   /* Type: six steps on a 1.2 ratio, one role per step — nothing else picks a size
      meta, tab labels · secondary, section labels · body · card and menu title · sheet heading · page title */
-  --font: 'Figtree Variable', Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font: system-ui, -apple-system, 'Segoe UI', sans-serif;   /* the look picks the faces (looks.css) */
   --font-display: var(--font);
   --text-xs: 12px;
   --text-sm: 14px;
@@ -149,6 +152,11 @@
   --weight-label: 600;
   --weight-title: 700;
   --weight-display: var(--weight-title);   /* titles set in --font-display */
+  --tracking-title: -.025em;
+  --tracking-heading: -.02em;
+  --text-label: var(--text-sm);   /* section labels: case and tracking are the look's */
+  --label-case: none;
+  --label-tracking: 0;
   --leading: 1.45;
 
   /* Motion */
@@ -167,13 +175,4 @@
 }
 @media (max-height: 30em) {   /* phone landscape, short windows */
   :root { --text-title: var(--text-xl); }
-}
-@media (prefers-contrast: more) {   /* the device asks for more contrast: secondary text darkens, lines thicken */
-  :root {
-    --color-text-muted: light-dark(#2f323c, #d0d3dc);
-    --color-text-faint: light-dark(#3e414c, #b9bcc6);
-    --color-line: color-mix(in srgb, var(--color-text) var(--alpha-strong), transparent);
-    --color-line-strong: color-mix(in srgb, var(--color-text) calc(var(--alpha-strong) + var(--alpha-medium)), transparent);
-    --glass: var(--glass-strong);
-  }
 }

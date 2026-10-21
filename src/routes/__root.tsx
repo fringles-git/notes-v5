@@ -13,6 +13,10 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+// Runs before the first paint: puts the saved look (Paper or Glass), accent and light/dark on <html>, so the page
+// never flashes the default look while the Notes app loads. The app keeps these in localStorage (src/notes/App.tsx).
+const PRE_PAINT = `try{var d=document.documentElement,s=localStorage,l=s.getItem("notes:look"),a=s.getItem("notes:accent"),t=s.getItem("notes:theme");d.dataset.look=l==="paper"?"paper":"glass";if(a==="apricot"||a==="lilac")d.dataset.accent=a;if(t==="light"||t==="dark")d.dataset.theme=t}catch(e){document.documentElement.dataset.look="glass"}`;
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -79,8 +83,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" },
       { name: "color-scheme", content: "light dark" },
-      { name: "theme-color", content: "#EEF0F6", media: "(prefers-color-scheme: light)" },
-      { name: "theme-color", content: "#08090C", media: "(prefers-color-scheme: dark)" },
+      { name: "theme-color", content: "#F4F5F8", media: "(prefers-color-scheme: light)" },
+      { name: "theme-color", content: "#0B0C0F", media: "(prefers-color-scheme: dark)" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
@@ -103,8 +107,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: PRE_PAINT }} />
         <HeadContent />
       </head>
       <body>

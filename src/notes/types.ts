@@ -50,6 +50,7 @@ export interface Prefs {
   hand: 'right' | 'left';
   tint: 'off' | 'on';
   look?: 'glass' | 'paper';
+  accent?: 'amber' | 'apricot' | 'lilac';
   formatBar?: boolean;
   ocr?: boolean;
   asr?: boolean;   // voice notes transcribed on the device

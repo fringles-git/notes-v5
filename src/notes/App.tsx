@@ -1,6 +1,5 @@
 import { useEffect, useLayoutEffect, useSyncExternalStore } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import '@fontsource-variable/figtree';
 import './styles/tokens.css';
 import './styles/app.css';
 import './styles/looks.css';
@@ -60,14 +59,17 @@ function useInstall() {
 /** Mirrors preferences and modes onto <html>/<body> for CSS. */
 function useDocumentState() {
   const s = useStore(useShallow(s => ({
-    theme: s.prefs.theme, look: s.prefs.look ?? 'glass', hand: s.prefs.hand, tint: s.prefs.tint, editing: s.editor.id !== null,
+    theme: s.prefs.theme, look: s.prefs.look ?? 'glass', accent: s.prefs.accent ?? 'amber', hand: s.prefs.hand, tint: s.prefs.tint, editing: s.editor.id !== null,
     selecting: s.selecting, searching: s.searchOpen, recording: s.recorder.on, layer: !!s.layer.mode || !!s.sheet, notes: s.notes,
-    sheet: !!s.sheet || s.welcome,
+    sheet: !!s.sheet || s.welcome, ready: s.ready,
   })));
   useLayoutEffect(() => {
     const root = document.documentElement, body = document.body;
-    if (s.theme === 'auto') delete root.dataset.theme; else root.dataset.theme = s.theme;
-    root.dataset.look = s.look;
+    if (s.ready) {   // until the saved prefs load, <html> keeps what the pre-paint script set
+      if (s.theme === 'auto') delete root.dataset.theme; else root.dataset.theme = s.theme;
+      root.dataset.look = s.look;
+      if (s.accent === 'amber') delete root.dataset.accent; else root.dataset.accent = s.accent;
+    }
     Object.assign(body.dataset, { hand: s.hand, tint: s.tint });
     body.classList.toggle('is-editing', s.editing);
     body.classList.toggle('is-selecting', s.selecting);
@@ -77,6 +79,10 @@ function useDocumentState() {
     body.classList.toggle('sheet-open', s.sheet);
   });
   useEffect(() => { checkTab(); releaseUrls(s.notes); updateBadge(s.notes); }, [s.notes]);
+  // The pre-paint script in __root.tsx reads these back: the next visit opens in the right look, without a flash
+  useEffect(() => {
+    if (s.ready) try { localStorage.setItem('notes:look', s.look); localStorage.setItem('notes:accent', s.accent); localStorage.setItem('notes:theme', s.theme); } catch { /* private mode: the look applies once the app loads */ }
+  }, [s.ready, s.look, s.accent, s.theme]);
 }
 
 export function App() {

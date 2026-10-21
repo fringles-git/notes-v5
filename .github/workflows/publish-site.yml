@@ -1,0 +1,45 @@
+# main → notes-v5-site → notes-v5.brandonlazarre.fr
+# Hostinger's build machine cannot run the prerender step (it needs a local Worker preview), so the site is built here
+# and pushed, ready to serve, to the notes-v5-site branch: dist/ plus a package.json whose build only checks dist/.
+# Hostinger (Déploiements → Branche: notes-v5-site, Répertoire de sortie: dist) then publishes dist/ as is.
+name: Publish site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: publish-site
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: npx tsc --noEmit -p .
+      - name: Build (prerenders / into .output/public/index.html)
+        run: npx vite build && test -f .output/public/index.html
+      - name: Push .output/public to notes-v5-site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          src=$(git rev-parse --short HEAD)
+          site=$(mktemp -d)
+          git fetch --depth 1 origin notes-v5-site
+          git worktree add --detach "$site" FETCH_HEAD
+          rm -rf "$site/dist" && cp -r .output/public "$site/dist"
+          cd "$site"
+          git add -A
+          if git diff --cached --quiet; then echo "Site unchanged"; exit 0; fi
+          git commit -q -m "Site: Notes from main @ $src"
+          git push origin HEAD:notes-v5-site

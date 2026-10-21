@@ -14,6 +14,10 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    // The Notes app runs on the device only (ClientOnly), so its one page is prerendered at build time: .output/public
+    // gets a static index.html any static host (Hostinger) can serve as is; the Worker keeps serving Lovable's hosting.
+    prerender: { enabled: true, crawlLinks: false },
+    pages: [{ path: "/" }],
   },
   vite: {
     define: { __BUILD__: JSON.stringify(BUILD) },

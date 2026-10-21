@@ -1,0 +1,375 @@
+{
+ "shots": [
+  "home-glass-light-390.png",
+  "settings-glass-light-390.png",
+  "editor-glass-light-390.png",
+  "home-glass-light-768.png",
+  "home-glass-light-1280.png",
+  "contrast-more-glass-light-390.png",
+  "home-glass-dark-390.png",
+  "settings-glass-dark-390.png",
+  "editor-glass-dark-390.png",
+  "home-glass-dark-768.png",
+  "home-glass-dark-1280.png",
+  "contrast-more-glass-dark-390.png",
+  "home-paper-light-390.png",
+  "settings-paper-light-390.png",
+  "editor-paper-light-390.png",
+  "home-paper-light-768.png",
+  "home-paper-light-1280.png",
+  "contrast-more-paper-light-390.png",
+  "home-paper-dark-390.png",
+  "settings-paper-dark-390.png",
+  "editor-paper-dark-390.png",
+  "home-paper-dark-768.png",
+  "home-paper-dark-1280.png",
+  "contrast-more-paper-dark-390.png"
+ ],
+ "contrast": [
+  {
+   "look": "glass",
+   "scheme": "light",
+   "width": 390,
+   "screen": "home",
+   "fails": [],
+   "checked": 35,
+   "min": {
+    "text": 5.29,
+    "muted": 7.85,
+    "faint": 5.67
+   }
+  },
+  {
+   "look": "glass",
+   "scheme": "light",
+   "width": 390,
+   "screen": "settings",
+   "fails": [],
+   "checked": 28,
+   "min": {
+    "text": 15.28,
+    "muted": 7.3,
+    "faint": 5.95
+   }
+  },
+  {
+   "look": "glass",
+   "scheme": "light",
+   "width": 390,
+   "screen": "editor",
+   "fails": [],
+   "checked": 7,
+   "min": {
+    "text": 4.53,
+    "muted": 8.26,
+    "faint": 5.97
+   }
+  },
+  {
+   "look": "glass",
+   "scheme": "light",
+   "width": 768,
+   "screen": "home",
+   "fails": [],
+   "checked": 49,
+   "min": {
+    "text": 5.29,
+    "muted": 7.68,
+    "faint": 5.67
+   }
+  },
+  {
+   "look": "glass",
+   "scheme": "light",
+   "width": 1280,
+   "screen": "home",
+   "fails": [],
+   "checked": 48,
+   "min": {
+    "text": 5.29,
+    "muted": 7.68,
+    "faint": 5.67
+   }
+  },
+  {
+   "look": "glass",
+   "scheme": "dark",
+   "width": 390,
+   "screen": "home",
+   "fails": [],
+   "checked": 35,
+   "min": {
+    "text": 4.86,
+    "muted": 8.55,
+    "faint": 5.68
+   }
+  },
+  {
+   "look": "glass",
+   "scheme": "dark",
+   "width": 390,
+   "screen": "settings",
+   "fails": [],
+   "checked": 28,
+   "min": {
+    "text": 15.27,
+    "muted": 8.16,
+    "faint": 6.15
+   }
+  },
+  {
+   "look": "glass",
+   "scheme": "dark",
+   "width": 390,
+   "screen": "editor",
+   "fails": [],
+   "checked": 7,
+   "min": {
+    "text": 5.74,
+    "muted": 9.24,
+    "faint": 6.14
+   }
+  },
+  {
+   "look": "glass",
+   "scheme": "dark",
+   "width": 768,
+   "screen": "home",
+   "fails": [],
+   "checked": 49,
+   "min": {
+    "text": 4.86,
+    "muted": 7.58,
+    "faint": 5.68
+   }
+  },
+  {
+   "look": "glass",
+   "scheme": "dark",
+   "width": 1280,
+   "screen": "home",
+   "fails": [],
+   "checked": 48,
+   "min": {
+    "text": 4.86,
+    "muted": 7.58,
+    "faint": 5.68
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "light",
+   "width": 390,
+   "screen": "home",
+   "fails": [],
+   "checked": 35,
+   "min": {
+    "text": 5.2,
+    "muted": 8.87,
+    "faint": 6.47
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "light",
+   "width": 390,
+   "screen": "settings",
+   "fails": [],
+   "checked": 28,
+   "min": {
+    "text": 14.95,
+    "muted": 8.52,
+    "faint": 6.99
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "light",
+   "width": 390,
+   "screen": "editor",
+   "fails": [],
+   "checked": 7,
+   "min": {
+    "text": 4.62,
+    "muted": 9.59,
+    "faint": 6.99
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "light",
+   "width": 768,
+   "screen": "home",
+   "fails": [],
+   "checked": 49,
+   "min": {
+    "text": 5.2,
+    "muted": 8.61,
+    "faint": 6.47
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "light",
+   "width": 1280,
+   "screen": "home",
+   "fails": [],
+   "checked": 46,
+   "min": {
+    "text": 5.2,
+    "muted": 8.61,
+    "faint": 6.47
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "dark",
+   "width": 390,
+   "screen": "home",
+   "fails": [],
+   "checked": 35,
+   "min": {
+    "text": 5.41,
+    "muted": 8.54,
+    "faint": 6.31
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "dark",
+   "width": 390,
+   "screen": "settings",
+   "fails": [],
+   "checked": 28,
+   "min": {
+    "text": 13.02,
+    "muted": 7.35,
+    "faint": 6.31
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "dark",
+   "width": 390,
+   "screen": "editor",
+   "fails": [],
+   "checked": 7,
+   "min": {
+    "text": 5.07,
+    "muted": 8.54,
+    "faint": 6.31
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "dark",
+   "width": 768,
+   "screen": "home",
+   "fails": [],
+   "checked": 49,
+   "min": {
+    "text": 5.41,
+    "muted": 7.58,
+    "faint": 6.31
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "dark",
+   "width": 1280,
+   "screen": "home",
+   "fails": [],
+   "checked": 46,
+   "min": {
+    "text": 5.41,
+    "muted": 7.58,
+    "faint": 6.31
+   }
+  }
+ ],
+ "motion": [
+  {
+   "look": "glass",
+   "scheme": "light",
+   "fast": "1ms",
+   "slow": "1ms",
+   "press": "1",
+   "ambientAnim": "0.001s"
+  },
+  {
+   "look": "glass",
+   "scheme": "dark",
+   "fast": "1ms",
+   "slow": "1ms",
+   "press": "1",
+   "ambientAnim": "0.001s"
+  },
+  {
+   "look": "paper",
+   "scheme": "light",
+   "fast": "1ms",
+   "slow": "1ms",
+   "press": "1",
+   "ambientAnim": "0.001s"
+  },
+  {
+   "look": "paper",
+   "scheme": "dark",
+   "fast": "1ms",
+   "slow": "1ms",
+   "press": "1",
+   "ambientAnim": "0.001s"
+  }
+ ],
+ "hc": [
+  {
+   "look": "glass",
+   "scheme": "light",
+   "dockBlur": "none",
+   "cardBorder": "1px",
+   "fails": [],
+   "min": {
+    "text": 5.29,
+    "muted": 11.73,
+    "faint": 9.33
+   }
+  },
+  {
+   "look": "glass",
+   "scheme": "dark",
+   "dockBlur": "none",
+   "cardBorder": "1px",
+   "fails": [],
+   "min": {
+    "text": 4.86,
+    "muted": 11.84,
+    "faint": 9.34
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "light",
+   "dockBlur": "none",
+   "cardBorder": "1px",
+   "fails": [],
+   "min": {
+    "text": 5.2,
+    "muted": 13.26,
+    "faint": 10.84
+   }
+  },
+  {
+   "look": "paper",
+   "scheme": "dark",
+   "dockBlur": "none",
+   "cardBorder": "1px",
+   "fails": [],
+   "min": {
+    "text": 5.41,
+    "muted": 11.44,
+    "faint": 9.22
+   }
+  }
+ ],
+ "errors": []
+}

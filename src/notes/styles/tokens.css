@@ -18,7 +18,7 @@
 
   /* Ink; lines and fills are the ink itself at a step of the opacity scale, so they follow every look and scheme */
   --color-text: light-dark(#16171b, #f2f3f7);
-  --color-text-muted: light-dark(#484c59, #a4a8b4);   /* ≥7:1 on the ground and on cards */
+  --color-text-muted: light-dark(#484c59, #b0b4bf);   /* ≥7:1 on the ground, cards and tinted widgets */
   --color-text-faint: light-dark(#5d616d, #8e929b);   /* ≥5.4:1 as text on every surface */
   --color-line: color-mix(in srgb, var(--color-text) var(--alpha-soft), transparent);
   --color-line-strong: color-mix(in srgb, var(--color-text) var(--alpha-medium), transparent);

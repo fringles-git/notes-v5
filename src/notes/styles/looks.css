@@ -1,76 +1,115 @@
-/* Two looks, chosen in Réglages → Style. Each only re-points tokens and a few surfaces; meanings of colour never change. */
-
-/* Shared additions */
-:root {
-  --font-display: var(--font);
-  --press: .97;
-  --shadow-1: 0 1px 2px light-dark(#1218300f, #0000004d);
-  --shadow-2: 0 8px 24px light-dark(#12183014, #00000059);
-  --shadow-3: 0 24px 60px light-dark(#1218301f, #00000073);
-}
-#page-title, .editor-title, .welcome-title, .sheet-head h2, .first-use h2, .news-title, .about-name { font-family: var(--font-display); }
-:is(button, .card):active { scale: var(--press); }
+/* Two looks, chosen in Réglages → Style, set on <html data-look> before the first paint (src/routes/__root.tsx).
+   A look only re-points tokens; components never test the look. Meanings of colour never change:
+   amber = create and pinned · blue = selection · red = delete, recording · green = done. */
 
 /* ---------- B · Soft Glass Pro (default) ---------- */
-:root[data-look='glass'] {
-  --font: 'Manrope Variable', Manrope, system-ui, sans-serif;
+:root, :root[data-look='glass'] {
+  --font: 'Manrope Variable', Manrope, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Sora Variable', Sora, var(--font);
+  --weight-display: 700;
+  --tracking-title: -.035em;
+  --tracking-heading: -.02em;
+
   --color-bg: light-dark(#f4f5f8, #0b0c0f);
-  --glass: light-dark(#ffffff9e, #23242b85);
+  --color-card: light-dark(#ffffff, #17181d);
+  --color-raised: light-dark(#ffffff, #34353d);
+  --color-editor: light-dark(#fafbfc, #0e0f13);
+
+  --glass: light-dark(rgb(255 255 255 / 62%), rgb(38 39 46 / 62%));
   --glass-blur: blur(28px) saturate(180%);
-  --color-accent-deep: light-dark(#8c6600, #d9a514);
-  --color-select: light-dark(#0062cc, #0a84ff);
-  --text-sm: 14px; --text-md: 15px; --text-lg: 17px; --text-xl: 21px;
-  --weight-title: 700; --weight-heading: 700; --weight-label: 600;
-  --glass-shadow:
-    inset 0 1px 0 light-dark(#ffffffe6, #ffffff2e),
-    var(--shadow-2);
-  --color-scrim: light-dark(#10121a33, #00000066);
+
+  --color-accent: #f4c542;
+  --color-accent-stroke: #d9a514;
+  --color-accent-deep: light-dark(#8c6600, #e0ac1c);
+  --color-select: light-dark(#0062cc, #0a84ff);   /* #0a84ff as ink in the dark; deepened in the light to keep 4.5:1 on white */
+  --color-scrim: color-mix(in srgb, #0b0c0f var(--alpha-strong), transparent);   /* sheets dim the page to 40 % */
+
+  --radius-md: 22px;   /* cards */
+  --radius-lg: 28px;   /* sheets */
+  --radius-dock: 999px;   /* a floating pill… */
+  --dock-lift: 4px;       /* …that rises 4px off the bottom */
 }
-[data-look='glass'] #page-title, [data-look='glass'] .editor-title { letter-spacing: -.035em; }
-[data-look='glass'] .card { box-shadow: var(--shadow-1); }
 
 /* ---------- A · Paper and Ink ---------- */
 :root[data-look='paper'] {
-  --font: 'Work Sans Variable', 'Work Sans', system-ui, sans-serif;
-  --font-display: 'Instrument Serif', Georgia, serif;
+  --font: 'Work Sans Variable', 'Work Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --weight-display: 400;
+  --tracking-title: -.01em;
+  --tracking-heading: 0;
+  --text-title: 38px;     /* the serif runs small: display sizes of its own */
+  --text-heading: 28px;
+  --text-label: var(--text-xs);   /* section labels: small capitals, tracked */
+  --label-case: uppercase;
+  --label-tracking: .04em;
+  --leading: 1.55;
+
   --color-bg: light-dark(#f7f4ec, #121110);
+  --ambient-1: var(--color-bg); --ambient-2: var(--color-bg); --ambient-3: var(--color-bg);
   --color-card: light-dark(#fffdf7, #1c1a17);
-  --color-card-solid: var(--color-card);
-  --color-editor: light-dark(#fbf9f3, #161412);
+  --color-raised: light-dark(#fffdf7, #2c2925);
+  --color-editor: var(--color-card);
   --color-text: light-dark(#1f1b16, #f3efe6);
-  --color-text-muted: light-dark(#4a4339, #b5ad9f);
-  --color-text-faint: light-dark(#5f574b, #9a9284);
-  --color-line: light-dark(#1f1b161a, #f3efe61a);
-  --color-line-strong: light-dark(#1f1b1633, #f3efe633);
-  --color-fill: light-dark(#1f1b160d, #f3efe612);
-  --color-fill-strong: light-dark(#1f1b1617, #f3efe61f);
+  --color-text-muted: light-dark(#4a4339, #bdb5a7);
+  --color-text-faint: light-dark(#5f574b, #a39b8d);
+  --color-on-accent: #1f1b16;
+
   --color-accent: #f2b632;
-  --color-accent-deep: light-dark(#835c00, #f2b632);
-  --color-select: light-dark(#2f5bd3, #7d9cf0);
-  --color-select-tint: light-dark(#2f5bd31a, #7d9cf02e);
+  --color-accent-stroke: #c9921a;
+  --color-accent-deep: light-dark(#7d5800, #f2b632);
+  --color-select: light-dark(#2f5bd3, #8aa6f2);
   --color-danger: light-dark(#c8322b, #ff7a6e);
-  /* no glass: solid paper everywhere */
+  --color-highlight: light-dark(#f6e2a2, #4d3d12);
+  --color-scrim: light-dark(color-mix(in srgb, #1f1b16 var(--alpha-medium), transparent), color-mix(in srgb, #000 var(--alpha-strong), transparent));
+
+  /* no glass: solid paper everywhere, 1px hairlines at 10 % ink */
+  --hairline: 1px;
   --glass: var(--color-card);
   --glass-strong: var(--color-card);
-  --glass-edge: var(--color-line-strong);
+  --glass-nav: var(--color-card);
+  --glass-solid: var(--color-card);
+  --glass-edge: var(--color-line);
   --glass-blur: none;
   --glass-shine: none;
-  --glass-shadow: 0 1px 0 var(--color-line);
-  --color-accent-glow: none;
-  --color-scrim: light-dark(#1f1b1638, #00000080);
-  --gutter: 20px;
-  --radius-row: 10px; --radius-panel: 14px; --radius-card: 14px; --radius-island: 20px; --radius-control: 12px;
-  --text-title: clamp(36px, 10vw, 46px);
-  --weight-title: 400; --weight-heading: 600; --weight-label: 600;
-  --leading: 1.55;
+  --color-accent-glow: 0 0 transparent;
+
+  /* shadow only on sheets */
+  --shadow-1: 0 0 transparent;
+  --shadow-2: 0 0 transparent;
+  --shadow-3: 0 12px 32px rgb(0 0 0 / var(--alpha-soft));
+  --shadow-knob: 0 0 0 1px var(--color-line-strong);
+  --shadow-fab: inset 0 0 0 1px var(--color-accent-stroke);
+
+  --radius-ratio: 4.8;   /* 48px controls → 10px */
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-dock: var(--radius-island);   /* a solid paper dock, squared like everything else */
+  --dock-lift: 0px;
+  --gutter: var(--space-4);
 }
-[data-look='paper'] .ambient { display: none; }
-[data-look='paper'] .glass { border-width: 1px; }
-[data-look='paper'] .glass::before { display: none; }
-[data-look='paper'] .card { box-shadow: none; border: 1px solid var(--color-line); }
-[data-look='paper'] .sheet { box-shadow: 0 12px 32px #0000001a; }
-[data-look='paper'] .scrim { -webkit-backdrop-filter: none; backdrop-filter: none; }
-[data-look='paper'] :is(#page-title, .editor-title, .welcome-title) { letter-spacing: -.01em; font-weight: 400; }
-[data-look='paper'] :is(.sheet-head h2, .first-use h2, .news-title, .about-name) { font-weight: 400; font-size: calc(var(--text-xl) + 4px); letter-spacing: 0; }
-[data-look='paper'] h4 { text-transform: uppercase; letter-spacing: .06em; font-size: var(--text-xs); }
+
+/* ---------- Accent (Réglages → Accent): the hue of "create and pinned"; amber unless chosen ---------- */
+:root[data-accent='apricot'] {
+  --color-accent: #f59e5b; --color-accent-stroke: #d97b33; --color-accent-deep: light-dark(#9a4a0f, #f8a76b); --color-on-accent: #2a1505;
+}
+:root[data-accent='lilac'] {
+  --color-accent: #b9a2f5; --color-accent-stroke: #9479e3; --color-accent-deep: light-dark(#5b3fc4, #c3b1f7); --color-on-accent: #1d1433;
+}
+
+/* ---------- The device's own asks win over a look ---------- */
+@media (prefers-contrast: more) {   /* secondary text darkens, lines thicken, glass turns solid */
+  :root, :root[data-look] {
+    --color-text-muted: light-dark(#2f323c, #d0d3dc);
+    --color-text-faint: light-dark(#3e414c, #b9bcc6);
+    --color-line: color-mix(in srgb, var(--color-text) var(--alpha-strong), transparent);
+    --color-line-strong: color-mix(in srgb, var(--color-text) calc(var(--alpha-strong) + var(--alpha-medium)), transparent);
+    --glass: var(--glass-strong);
+  }
+  :root[data-look='paper'] { --color-text-muted: light-dark(#2e2820, #d8d1c4); --color-text-faint: light-dark(#3d362c, #c4bcae); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root, :root[data-look] { --glass: var(--glass-strong); --glass-blur: none; }
+}
+@media (max-height: 30em) {   /* phone landscape, short windows */
+  :root[data-look='paper'] { --text-title: var(--text-heading); }
+}

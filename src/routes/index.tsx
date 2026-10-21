@@ -8,9 +8,17 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Notes" },
-      { name: "description", content: "Vos notes, listes, photos et messages vocaux, à portée de pouce. Fonctionne hors ligne." },
+      {
+        name: "description",
+        content:
+          "Vos notes, listes, photos et messages vocaux, à portée de pouce. Fonctionne hors ligne.",
+      },
       { property: "og:title", content: "Notes" },
-      { property: "og:description", content: "Vos notes, listes, photos et messages vocaux, à portée de pouce. Fonctionne hors ligne." },
+      {
+        property: "og:description",
+        content:
+          "Vos notes, listes, photos et messages vocaux, à portée de pouce. Fonctionne hors ligne.",
+      },
     ],
   }),
   component: Index,

@@ -274,6 +274,7 @@ async function slideImage(n: Note) {
   return { data: await readDataUrl(blob), x: 7.8 + (4.8 - w) / 2, y: 0.8 + (5.9 - h) / 2, w, h };
 }
 export async function exportPptx(title: string, notes: Note[], fileName: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the vendor bundle's global has no types
   const Pptx = await loadScript<any>('./vendor/extra/pptxgen.bundle.js', 'PptxGenJS'), deck = new Pptx();
   deck.layout = 'LAYOUT_WIDE';
   deck.title = title;

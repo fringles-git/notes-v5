@@ -14,7 +14,7 @@ import {
   retryMissed, reveal, startStudy, startTour, studyNotes, toggleAsr, toggleOcr, openMap,
 } from '../features';
 import { bytes, clock, day, dayTime, fmt, plural, time } from '../utils';
-import { Chip, Formatted, HANDS, LOOKS, Layer, Row, Segmented, StateMark, Switch, THEMES } from './kit';
+import { ACCENTS, Chip, Formatted, HANDS, LOOKS, Layer, Row, Segmented, StateMark, Switch, THEMES } from './kit';
 import { Icon } from './icons';
 import { pickFile } from './Files';
 
@@ -212,7 +212,8 @@ function Settings() {
   return (
     <div className="cols">
       <div>
-        <Segmented pref="look" label="Style" options={LOOKS as any} />
+        <Segmented pref="look" label="Style" options={LOOKS} />
+        <Segmented pref="accent" label="Accent" options={ACCENTS} />
         <Segmented pref="theme" label="Thème" options={THEMES} />
         <Segmented pref="hand" label="Main dominante" options={HANDS} />
         <Segmented pref="tint" label="Couleur des dossiers" options={[['off', 'Pastille'], ['on', 'Teinter']]} />

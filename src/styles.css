@@ -1,3 +1,11 @@
-/* The Notes app brings its own stylesheets (src/notes/styles), loaded with the app itself. */
-html { background: #eef0f6; }
-@media (prefers-color-scheme: dark) { html { background: #08090c; } }
+/* The Notes app brings its own stylesheets (src/notes/styles), loaded with the app itself. Until then, <html> shows the
+   ground of the look the pre-paint script in __root.tsx set: Glass (default) or Paper, light or dark.
+   :where() keeps these at zero specificity, so the app's tokens take over as soon as they load. */
+:where(html) { background: #f4f5f8; }
+:where(html[data-look="paper"]) { background: #f7f4ec; }
+:where(html[data-theme="dark"]) { background: #0b0c0f; }
+:where(html[data-look="paper"][data-theme="dark"]) { background: #121110; }
+@media (prefers-color-scheme: dark) {
+  :where(html:not([data-theme="light"])) { background: #0b0c0f; }
+  :where(html[data-look="paper"]:not([data-theme="light"])) { background: #121110; }
+}

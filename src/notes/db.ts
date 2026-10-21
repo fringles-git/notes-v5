@@ -40,6 +40,7 @@ export async function storageInfo() {
 
 /* ---------- Notes from storage or backups ---------- */
 export function normalizeNote(raw: Record<string, unknown>): Note {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- a raw record from storage or a backup, checked field by field below
   const { att, ...n } = raw as Record<string, any>;
   return {
     folder: '', by: 'me', created: Date.now(), updated: Date.now(),

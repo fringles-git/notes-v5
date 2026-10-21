@@ -1,7 +1,14 @@
-/* Notes — design tokens. A calm plain ground, solid content, liquid glass only for what floats over it. */
+/* Notes — design tokens. One foundation for both looks (Réglages → Style): scales, layers, motion, shape.
+   looks.css re-points the palette, fonts and radii per look; components (app.css) only ever read tokens. */
 
 :root {
   color-scheme: light dark;
+
+  /* Opacity: four steps, used for lines, fills, tints, veils and shadows — never a hex alpha suffix in a component */
+  --alpha-faint: 6%;
+  --alpha-soft: 10%;
+  --alpha-medium: 20%;
+  --alpha-strong: 40%;
 
   /* Ground; the ambient field (three soft blobs) is kept for the welcome only */
   --color-bg: light-dark(#eef0f6, #08090c);
@@ -9,59 +16,61 @@
   --ambient-2: light-dark(#cfe0ff, #0d1f3d);
   --ambient-3: light-dark(#f5d6ec, #2a1024);
 
-  /* Ink */
+  /* Ink; lines and fills are the ink itself at a step of the opacity scale, so they follow every look and scheme */
   --color-text: light-dark(#16171b, #f2f3f7);
-  --color-text-muted: light-dark(#484c59, #a4a8b4);   /* ≥7:1 on the ground and on cards */
+  --color-text-muted: light-dark(#484c59, #b0b4bf);   /* ≥7:1 on the ground, cards and tinted widgets */
   --color-text-faint: light-dark(#5d616d, #8e929b);   /* ≥5.4:1 as text on every surface */
-  --color-line: light-dark(#16171b14, #ffffff14);
-  --color-line-strong: light-dark(#16171b2e, #ffffff2e);
-  --color-focus: light-dark(#16171b, #f2f3f7);   /* focus ring: ink, readable on amber, blue and grey alike */
+  --color-line: color-mix(in srgb, var(--color-text) var(--alpha-soft), transparent);
+  --color-line-strong: color-mix(in srgb, var(--color-text) var(--alpha-medium), transparent);
+  --color-focus: var(--color-text);   /* focus ring: ink, readable on amber, blue and grey alike */
 
   /* Surfaces: four roles, never stacked glass on glass
      ground (--color-bg) · content, solid (--color-card) · floating controls and overlays, glass (--glass*) · chosen (--color-select-tint) */
   --color-card: light-dark(#ffffff, #1a1b20);
-  --color-card-solid: light-dark(#ffffff, #1a1b20);
-  --color-fill: light-dark(#16171b0d, #ffffff12);
-  --color-fill-strong: light-dark(#16171b17, #ffffff1f);
+  --color-raised: light-dark(#ffffff, #3a3b43);   /* a solid knob or thumb sitting on a fill */
+  --color-fill: color-mix(in srgb, var(--color-text) var(--alpha-faint), transparent);
+  --color-fill-strong: color-mix(in srgb, var(--color-text) var(--alpha-soft), transparent);
   --color-editor: light-dark(#f7f8fb, #0e0f13);   /* the page being written: solid, nothing shows through */
+  --color-on-strong: #fff;   /* text and icons on blue, red, green and folder fills */
 
   /* Glass */
   --glass: light-dark(#ffffff8c, #26272e80);
   --glass-strong: light-dark(#ffffffc4, #1e1f25c9);
+  --glass-nav: color-mix(in srgb, var(--color-card) calc(100% - var(--alpha-medium)), transparent);   /* navigation reads clearly over content */
+  --glass-solid: color-mix(in srgb, var(--color-editor) calc(100% - var(--alpha-faint)), transparent);   /* long reads: near solid behind the text */
   --glass-edge: light-dark(#ffffffb3, #ffffff26);
   --glass-blur: blur(24px) saturate(180%);
   --glass-shine: linear-gradient(180deg, light-dark(#ffffffb3, #ffffff2e) 0%, #fff0 42%, #fff0 72%, light-dark(#ffffff40, #ffffff0f) 100%);
-  --glass-shadow:
-    inset 0 1px 0 light-dark(#ffffffe6, #ffffff33),
-    inset 0 -1px 0 light-dark(#ffffff59, #ffffff0d),
-    0 1px 2px light-dark(#1218300f, #0000004d),
-    0 10px 30px light-dark(#1218301f, #00000073);
+
+  /* Elevation: three steps; only what floats is lifted */
+  --shadow-1: 0 1px 2px light-dark(rgb(18 24 48 / 8%), rgb(0 0 0 / 30%));
+  --shadow-2: 0 8px 24px light-dark(rgb(18 24 48 / 11%), rgb(0 0 0 / 35%));
+  --shadow-3: 0 24px 60px light-dark(rgb(18 24 48 / 14%), rgb(0 0 0 / 45%));
+  --glass-shadow: var(--shadow-1), var(--shadow-2);
+  --shadow-knob: var(--shadow-1), 0 0 0 .5px var(--color-line);   /* a switch knob, a slider thumb */
+  --shadow-fab: inset 0 1px 0 rgb(255 255 255 / calc(100% - var(--alpha-strong))),
+    inset 0 -2px 6px color-mix(in srgb, var(--color-accent-stroke) var(--alpha-strong), transparent), var(--color-accent-glow), var(--shadow-1);
 
   /* One meaning per colour, everywhere — a colour never decorates:
      amber = create and pinned (the + and what it makes) · blue = selection, links · ink = focus, primary buttons, progress
-     red = delete, recording · green = done, switched on · folder colours = organisation only (kind tones: outline icons and tints) */
-  --color-accent: #f4c542;
+     red = delete, recording · green = done, switched on · folder colours = organisation (kind tones borrow them: outline icons and tints) */
+  --accent-amber: #f4c542; --accent-apricot: #f59e5b; --accent-lilac: #b9a2f5;   /* Réglages → Accent */
+  --color-accent: var(--accent-amber);
   --color-accent-deep: light-dark(#8c6600, #e0ac1c);   /* amber as ink (ticks, strokes, labels): ≥4.5:1; fills stay --color-accent */
+  --color-accent-stroke: #d9a514;   /* the +'s own edge */
   --color-on-accent: #1a1608;
-  --color-accent-glow: 0 8px 24px light-dark(#f4c54270, #f4c54240);
+  --color-accent-glow: 0 8px 24px color-mix(in srgb, var(--color-accent) var(--alpha-strong), transparent);
   --color-select: light-dark(#0062cc, #0a84ff);
-  --color-select-tint: light-dark(#0062cc1a, #0a84ff2e);
+  --color-select-tint: light-dark(color-mix(in srgb, var(--color-select) var(--alpha-soft), transparent), color-mix(in srgb, var(--color-select) var(--alpha-medium), transparent));
   --color-danger: light-dark(#d70015, #ff6961);
+  --color-danger-tint: color-mix(in srgb, var(--color-danger) var(--alpha-soft), transparent);
   --color-success: light-dark(#1e7a35, #40a970);
   --color-highlight: light-dark(#fbe7a1, #5a4610);
-  /* System tones: one meaning each, everywhere */
-  --tone-red: light-dark(#ff3b30, #ff453a);
-  --tone-orange: light-dark(#ff9500, #ff9f0a);
-  --tone-green: light-dark(#34c759, #30d158);
-  --tone-teal: light-dark(#30b0c7, #40c8e0);
-  --tone-blue: light-dark(#007aff, #0a84ff);
-  --tone-indigo: light-dark(#5856d6, #5e5ce6);
-  --tone-purple: light-dark(#af52de, #bf5af2);
-  --tone-pink: light-dark(#ff2d55, #ff375f);
-  --tone-gray: light-dark(#8e8e93, #98989d);
-  --color-scrim: light-dark(#10121a2e, #0000006b);
+  --color-scrim: light-dark(color-mix(in srgb, #10121a var(--alpha-medium), transparent), color-mix(in srgb, #000 var(--alpha-strong), transparent));   /* dims what's behind */
+  --color-shade: rgb(0 0 0 / var(--alpha-strong));   /* a control laid over a photo */
+  --veil-photo: linear-gradient(180deg, rgb(0 0 0 / var(--alpha-medium)), rgb(0 0 0 / calc(100% - var(--alpha-medium))));   /* text over a photo */
 
-  /* Folders: dot color, tint, readable text */
+  /* Folders: dot colour, tint, readable text — the one palette (kind tones map onto it, see app.css) */
   --folder-1: #4f86e8; --folder-1-tint: light-dark(#eaf1fdd9, #17243ad9); --folder-1-text: light-dark(#1d64e1, #6696eb);
   --folder-2: #e9824f; --folder-2-tint: light-dark(#fdeee6d9, #33211ad9); --folder-2-text: light-dark(#b64c17, #e9824f);
   --folder-3: #3fa56e; --folder-3-tint: light-dark(#e6f4ecd9, #14291dd9); --folder-3-text: light-dark(#2e7950, #40a970);
@@ -71,15 +80,14 @@
   --folder-7: #a2845e; --folder-7-tint: light-dark(#f3eee7d9, #2b241bd9); --folder-7-text: light-dark(#7f6749, #ab906e);
   --folder-8: #7c7c84; --folder-8-tint: light-dark(#eeeef0d9, #232326d9); --folder-8-text: light-dark(#636369, #94949a);
 
-  /* Space */
+  /* Space: six steps */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --edge: 12px;
+  --space-4: 20px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --edge: var(--space-3);
   --gutter: 16px;
   --safe-l: env(safe-area-inset-left, 0px);
   --safe-r: env(safe-area-inset-right, 0px);
@@ -93,10 +101,11 @@
   --layout-max: 1180px;
   --layer-w: 380px;
   --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: max(env(safe-area-inset-bottom, 0px), 8px);
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--space-2));
   --kb: 0px;
-  --dock-bottom: calc(var(--safe-bottom) + var(--space-2) + var(--kb));
-  --dock-space: calc(var(--dock-bottom) + var(--fab) + var(--space-6));   /* content always clears the dock (+ keyboard) */
+  --dock-lift: 0px;   /* a look can float the dock a little higher */
+  --dock-bottom: calc(var(--safe-bottom) + var(--space-2) + var(--dock-lift) + var(--kb));
+  --dock-space: calc(var(--dock-bottom) + var(--fab) + var(--space-4));   /* content always clears the dock (+ keyboard) */
   --layer-bottom: calc(var(--dock-bottom) + var(--fab) + var(--space-3));   /* menus and panels open above the dock, never over it */
   --dock-max: calc(var(--layout-max) - 2 * var(--gutter) + 2 * var(--edge));
   --dock-inset-l: max(var(--edge-l), (100vw - var(--dock-max)) / 2);   /* where the dock's sides fall: things above it line up */
@@ -104,34 +113,55 @@
   --split-list: clamp(22rem, 34vw, 30rem);   /* list pane when the note opens beside it: one readable column */
   --drawer-w: min(26rem, 45vw);   /* side panels on wide screens */
 
-  /* Shape: every radius = its box height ÷ 3; containers stay concentric (inner radius + padding) */
+  /* Shape: a control's radius = its height ÷ ratio; containers stay concentric (inner radius + padding) */
   --radius-ratio: 3;
-  --radius-control: calc(var(--dock-btn) / var(--radius-ratio));
-  --radius-island: calc(var(--radius-control) + var(--space-1));
-  --radius-row: calc(48px / var(--radius-ratio));
-  --radius-panel: calc(var(--radius-row) + var(--space-2));
-  --radius-card: calc(var(--space-4) + 24px / var(--radius-ratio));
+  --radius-xs: 3px;    /* bars, grabbers, marks */
+  --radius-sm: calc(var(--dock-btn) / var(--radius-ratio));   /* rows and 48px controls */
+  --radius-md: 24px;   /* cards, tiles, widgets */
+  --radius-lg: 24px;   /* sheets */
+  --radius-island: calc(var(--radius-sm) + var(--space-1));   /* an island wraps its buttons with --space-1 */
+  --radius-panel: calc(var(--radius-sm) + var(--space-2));    /* a menu wraps its rows with --space-2 */
+  --radius-dock: var(--radius-island);   /* dock islands; a look may make them pills */
+  --radius-dock-btn: calc(var(--radius-dock) - var(--space-1));   /* concentric inside them: the tabs, the +, the search field */
+  --hairline: .5px;   /* every border on content and glass */
 
-  /* Type: one scale, and one role per step — nothing else picks a size
-     title (page) · heading (sheet, welcome) · card title / menu title · body · section label · meta · tab label */
-  --font: 'Figtree Variable', Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --text-2xs: 11px;     /* tab and action labels: the smallest text, never smaller */
-  --text-xs: 12px;      /* meta: dates, counts, notes under an option */
-  --text-sm: 13.5px;    /* section labels, secondary text */
-  --text-md: 15px;      /* body: card text, rows, options */
-  --text-base: 16px;    /* inputs (no zoom on iOS) */
-  --text-lg: 17px;      /* card title, menu title */
-  --text-xl: 21px;      /* sheet heading */
-  --text-2xl: 26px;     /* welcome heading */
-  --text-title: clamp(30px, 8vw, 38px);   /* page title */
-  --weight-title: 800;
-  --weight-heading: 750;
-  --weight-label: 650;
+  /* Layers: named, from the page up — nothing else picks a z-index */
+  --z-base: 0;
+  --z-raised: 1;     /* inside content: a card's ⋮, its tick, a control's label over its thumb */
+  --z-dock: 20;
+  --z-editor: 30;
+  --z-sheet: 40;     /* veil; the sheet sits one above */
+  --z-popover: 44;   /* menus and panels, above any sheet */
+  --z-toast: 60;
+  --z-modal: 70;     /* the tour */
+
+  /* Type: six steps on a 1.2 ratio, one role per step — nothing else picks a size
+     meta, tab labels · secondary, section labels · body · card and menu title · sheet heading · page title */
+  --font: system-ui, -apple-system, 'Segoe UI', sans-serif;   /* the look picks the faces (looks.css) */
+  --font-display: var(--font);
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 19px;
+  --text-xl: 23px;
+  --text-2xl: 33px;
+  --text-input: 16px;   /* inputs: never smaller (no zoom on iOS), whatever the look */
+  --text-title: var(--text-2xl);     /* page title, editor title, welcome */
+  --text-heading: var(--text-xl);    /* sheet heading */
+  --weight-body: 500;
+  --weight-label: 600;
+  --weight-title: 700;
+  --weight-display: var(--weight-title);   /* titles set in --font-display */
+  --tracking-title: -.025em;
+  --tracking-heading: -.02em;
+  --text-label: var(--text-sm);   /* section labels: case and tracking are the look's */
+  --label-case: none;
+  --label-tracking: 0;
   --leading: 1.45;
 
   /* Motion */
+  --press: .97;
   --ease: cubic-bezier(.32, .72, 0, 1);
-  --ease-out: cubic-bezier(.2, .8, .2, 1);
   --fast: 140ms;
   --base: 240ms;
   --slow: 380ms;
@@ -141,17 +171,8 @@
 :root[data-theme='dark'] { color-scheme: dark; }
 
 @media (prefers-reduced-motion: reduce) {
-  :root { --fast: 1ms; --base: 1ms; --slow: 1ms; }
+  :root { --fast: 1ms; --base: 1ms; --slow: 1ms; --press: 1; }
 }
 @media (max-height: 30em) {   /* phone landscape, short windows */
-  :root { --text-title: 26px; }
-}
-@media (prefers-contrast: more) {   /* the device asks for more contrast: secondary text darkens, lines thicken */
-  :root {
-    --color-text-muted: light-dark(#2f323c, #d0d3dc);
-    --color-text-faint: light-dark(#3e414c, #b9bcc6);
-    --color-line: light-dark(#16171b4d, #ffffff4d);
-    --color-line-strong: light-dark(#16171b80, #ffffff80);
-    --glass: var(--glass-strong);
-  }
+  :root { --text-title: var(--text-xl); }
 }

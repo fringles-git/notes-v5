@@ -1,0 +1,6 @@
+{
+  "name": "notes-v5-site",
+  "private": true,
+  "description": "Built Notes app (static). Made from main by the build; Hostinger publishes dist/ as is. Do not edit by hand.",
+  "scripts": { "build": "node -e \"require('fs').accessSync('dist/index.html')\"" }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Notes",
+  "short_name": "Notes",
+  "description": "Vos notes, listes, photos et messages vocaux, à portée de pouce. Fonctionne hors ligne.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EEF0F6",
+  "theme_color": "#EEF0F6",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Nouvelle note", "url": "./?new=note", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Nouvelle liste", "url": "./?new=list", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Note vocale", "short_name": "Vocal", "url": "./?new=voice", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Note du jour", "url": "./?new=today", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ],
+  "share_target": {
+    "action": "./?share=receive",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [{ "name": "files", "accept": ["image/*", "audio/*", "application/pdf"] }]
+    }
+  }
+}

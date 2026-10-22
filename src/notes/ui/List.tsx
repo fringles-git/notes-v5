@@ -65,28 +65,28 @@ export function InfoBar() {
 }
 
 /* ---------- Récap: what matters today, at a glance (only what exists) ---------- */
-type Widget = { key: string; tone: string; icon: string; label: string; title: string; detail?: string; img?: string; onClick: () => void };
+type Widget = { key: string; icon: string; label: string; title: string; detail?: string; img?: string; onClick: () => void };
 function widgets(notes: Note[]): Widget[] {
   const now = Date.now(), out: Widget[] = [];
   // Open → write → close → come back: the note you were just writing, first and amber (current)
   const recent = notes.filter(n => n.updated > n.created && now - n.updated < CONFIG.resumeMs && (n.title || n.body).trim())
     .sort((a, b) => b.updated - a.updated)[0];
-  if (recent) out.push({ key: 'resume', tone: 'yellow', icon: 'edit', label: 'Reprendre', title: recent.title || 'Sans titre', detail: 'Modifiée à ' + time(recent.updated), onClick: () => open(recent.id) });
+  if (recent) out.push({ key: 'resume', icon: 'edit', label: 'Reprendre', title: recent.title || 'Sans titre', detail: 'Modifiée à ' + time(recent.updated), onClick: () => open(recent.id) });
   const soon = notes.flatMap(n => [
     ...(n.remind && !n.remindDone && n.remind > now ? [{ n, at: n.remind, time: true }] : []),
     ...entities(n).dates.filter(d => +d.start >= now - 36e5 * 12).map(d => ({ n, at: +d.start, time: d.hasTime })),
   ]).filter(x => x.at < now + 14 * 864e5).sort((a, b) => a.at - b.at);
   if (soon.length) out.push({
-    key: 'soon', tone: 'orange', icon: 'calendar', label: 'À venir', title: soon[0].n.title || 'Sans titre',
+    key: 'soon', icon: 'calendar', label: 'À venir', title: soon[0].n.title || 'Sans titre',
     detail: eventDate(new Date(soon[0].at), soon[0].time) + (soon.length > 1 ? ' · +' + (soon.length - 1) : ''), onClick: () => open(soon[0].n.id),
   });
   const due = notes.filter(n => dueCards(n).length), cards = due.reduce((t, n) => t + dueCards(n).length, 0);
-  if (cards) out.push({ key: 'study', tone: 'indigo', icon: 'study', label: 'À réviser', title: plural(cards, 'carte', 'cartes'), detail: plural(due.length, 'note', 'notes'), onClick: () => startStudy(due) });
+  if (cards) out.push({ key: 'study', icon: 'study', label: 'À réviser', title: plural(cards, 'carte', 'cartes'), detail: plural(due.length, 'note', 'notes'), onClick: () => startStudy(due) });
   // What is left to do, counted — the items themselves are on the cards below
   const todo = notes.map(n => ({ n, left: n.body.split('\n').map(parseCheck).filter(c => c && !c.done && c.text.trim()).length }))
     .filter(x => x.left).sort((a, b) => b.n.updated - a.n.updated);
   if (todo.length) out.push({
-    key: 'todo', tone: 'blue', icon: 'checklist', label: 'À faire', title: plural(todo.reduce((t, x) => t + x.left, 0), 'tâche restante', 'tâches restantes'),
+    key: 'todo', icon: 'checklist', label: 'À faire', title: plural(todo.reduce((t, x) => t + x.left, 0), 'tâche restante', 'tâches restantes'),
     detail: todo.length > 1 ? plural(todo.length, 'liste', 'listes') : 'Dans ' + (todo[0].n.title || 'Sans titre'),
     onClick: () => (todo.length > 1 ? setTab('lists') : open(todo[0].n.id)),
   });
@@ -94,7 +94,7 @@ function widgets(notes: Note[]): Widget[] {
   if (media) {
     const photo = firstAtt(media, 'image'), audio = firstAtt(media, 'audio');
     out.push({
-      key: 'media', tone: photo ? 'green' : 'pink', icon: photo ? 'image' : 'audio', label: photo ? 'Photo récente' : 'Note vocale',
+      key: 'media', icon: photo ? 'image' : 'audio', label: photo ? 'Photo récente' : 'Note vocale',
       title: media.title || 'Sans titre', detail: audio?.duration ? clock(Math.round(audio.duration)) : day(media.created), img: photo && urlOf(photo), onClick: () => open(media.id),
     });
   }
@@ -102,7 +102,7 @@ function widgets(notes: Note[]): Widget[] {
   if (old.length) {
     const pick = old[Math.floor(now / 864e5) % old.length], ago = daysAgo(pick.updated);
     out.push({
-      key: 'memory', tone: 'purple', icon: 'history', label: 'Souvenir', title: pick.title || 'Sans titre',
+      key: 'memory', icon: 'history', label: 'Souvenir', title: pick.title || 'Sans titre',
       detail: ago >= 365 ? 'Il y a ' + plural(Math.floor(ago / 365), 'an', 'ans') : ago >= 60 ? 'Il y a ' + Math.floor(ago / 30) + ' mois' : 'Il y a ' + ago + ' jours',
       onClick: () => open(pick.id),
     });
@@ -120,7 +120,7 @@ export function Recap() {
       {list.length > 0 && (
         <div className="recap-row">
           {list.map((w, i) => (
-            <button key={w.key} className="widget" data-tone={w.tone} data-size={list.length > 2 && (i === 0 || w.img) ? 'tall' : undefined} onClick={w.onClick}
+            <button key={w.key} className="widget" data-size={list.length > 2 && (i === 0 || w.img) ? 'tall' : undefined} onClick={w.onClick}
               title={w.detail ? w.title + ' · ' + w.detail : undefined}>
               {w.img && <img src={w.img} alt="" />}
               <span className="widget-label"><Icon name={w.icon} />{w.label}</span>

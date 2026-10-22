@@ -82,11 +82,11 @@ export function Layer({ open, onClose, label, className, children, initialFocus,
 /** Zero counts are noise: never shown. */
 export const shown = (v: ReactNode) => v != null && v !== '' && v !== 0 && v !== '0';
 
-export function Row({ icon, label, trailing, onClick, pressed, color, tone, disabled, className = 'row' }: {
-  icon?: ReactNode; label: ReactNode; trailing?: ReactNode; onClick?: () => void; pressed?: boolean; color?: number; tone?: string; disabled?: boolean; className?: string;
+export function Row({ icon, label, trailing, onClick, pressed, color, disabled, className = 'row' }: {
+  icon?: ReactNode; label: ReactNode; trailing?: ReactNode; onClick?: () => void; pressed?: boolean; color?: number; disabled?: boolean; className?: string;
 }) {
   return (
-    <button className={className} onClick={onClick} aria-pressed={pressed} data-color={color} data-tone={tone} disabled={disabled}>
+    <button className={className} onClick={onClick} aria-pressed={pressed} data-color={color} disabled={disabled}>
       {typeof icon === 'string' ? <Icon name={icon} /> : icon}
       <span className="row-label">{label}</span>
       {shown(trailing) && <small>{trailing}</small>}

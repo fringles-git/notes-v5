@@ -1,7 +1,7 @@
 /** Features around the notes: capture & import, attachments analysis, audio, reminders, sharing, study, exports, onboarding, boot. */
 import type { Attachment, Note, Prefs } from './types';
 import type { Vault } from './vault';
-import { CONFIG, CURRENT, DAY, DEFAULT_FOLDERS, HINTS, MSG, RELEASE_LIST, releasesSince, TOUR } from './config';
+import { CONFIG, DAY, DEFAULT_FOLDERS, HINTS, MSG, TOUR, VERSION } from './config';
 import { attFromBackup, backupBlob, getAll, normalizeNote, openDb } from './db';
 import { dueCards, flashcards, grade, hostOf, removeCardLine, URL_RE } from './markdown';
 import { audioPeaks, epubToNotes, exportPptx, fileToAtt, htmlFileToNote, isHeavy, markdownToNote, ocrText, pdfText, releaseUrls, titleFromFile, transcribe, zip } from './media';
@@ -469,7 +469,8 @@ export function install() {
 /** The guide lives in Aide, read in a sheet: it never sits among the user's notes. */
 export const openGuide = () => openSheet('guide');
 /** What's new in this version, any time (Réglages → Aide → Quoi de neuf). */
-export const openNews = () => set({ newsSince: RELEASE_LIST[1]?.version || CURRENT.version, sheet: 'news' });
+/** From Réglages: the latest release (the sheet reads it from the changelog). */
+export const openNews = () => set({ newsSince: null, sheet: 'news' });
 export function endWelcome(tour: boolean) {
   set({ welcome: false });
   setPref('onboarded', Date.now());
@@ -515,9 +516,12 @@ export async function boot() {
   syncLastId();
   // No sample notes: a first launch opens on an empty workspace that invites the first note (List.tsx, FirstUse)
   if (!prefs.onboarded) set({ welcome: true });
-  const seen = prefs.seenVersion || (prefs.onboarded ? '2.1.0' : CURRENT.version);
-  if (get().prefs.seenVersion !== CURRENT.version) setPref('seenVersion', CURRENT.version);
-  if (releasesSince(seen).length && !get().welcome) set({ newsSince: seen, sheet: 'news' });
+  const seen = prefs.seenVersion || (prefs.onboarded ? '2.1.0' : VERSION);
+  if (get().prefs.seenVersion !== VERSION) setPref('seenVersion', VERSION);
+  // Only after an update does the changelog load: what's new since the version this device last saw
+  if (seen !== VERSION && !get().welcome) import('./changelog').then(({ releasesSince }) => {
+    if (releasesSince(seen).length && !get().welcome && !get().sheet) set({ newsSince: seen, sheet: 'news' });
+  });
   removeNotes(get().notes.filter(n => n.deleted && n.deletedAt && n.deletedAt < Date.now() - CONFIG.trashDays * DAY));
   checkTab();
   set({ ready: true });

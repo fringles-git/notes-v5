@@ -12,7 +12,6 @@
 
   /* Ground; the ambient field (three soft blobs) is kept for the welcome only */
   --color-bg: light-dark(#eef0f6, #08090c);
-  --color-ground: var(--color-bg);
   --ambient-1: light-dark(#ffe9a8, #3a2f0c);
   --ambient-2: light-dark(#cfe0ff, #0d1f3d);
   --ambient-3: light-dark(#f5d6ec, #2a1024);
@@ -28,7 +27,6 @@
   /* Surfaces: four roles, never stacked glass on glass
      ground (--color-bg) · content, solid (--color-card) · floating controls and overlays, glass (--glass*) · chosen (--color-select-tint) */
   --color-card: light-dark(#ffffff, #1a1b20);
-  --color-surface: var(--color-card);
   --color-raised: light-dark(#ffffff, #3a3b43);   /* a solid knob or thumb sitting on a fill */
   --color-fill: color-mix(in srgb, var(--color-text) var(--alpha-faint), transparent);
   --color-fill-strong: color-mix(in srgb, var(--color-text) var(--alpha-soft), transparent);

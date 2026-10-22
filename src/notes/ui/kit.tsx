@@ -132,6 +132,9 @@ export function Segmented<K extends PrefKey>({ pref, label, options }: { pref: K
     </>
   );
 }
+/** A titled section of a sheet. */
+export const Section = ({ title, show = true, children }: { title: string; show?: boolean; children: ReactNode }) =>
+  show ? <section className="sheet-section"><h3>{title}</h3>{children}</section> : null;
 /** On/off: a squared knob slides and says its state — ✓ on green, − off. */
 export const Switch = ({ on, label, note, onClick }: { on: boolean; label: string; note?: ReactNode; onClick: () => void }) => (
   <button className="option" role="switch" aria-checked={on} onClick={onClick}>

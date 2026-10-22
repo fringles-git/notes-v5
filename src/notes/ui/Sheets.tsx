@@ -1,9 +1,9 @@
 /** Full sheets: study, link map, overview, settings, about, what's new — plus toast and print area. */
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useShallow } from 'zustand/react/shallow';
-import type { ChangeKind, Note, SheetMode } from '../types';
-import { CHANGE_KINDS, CREDITS, CURRENT, findRelease, GUIDE, RELEASE_LIST, releasesSince, type Release } from '../config';
+import type { Note, SheetMode } from '../types';
+import { VERSION } from '../config';
 import { backlinks, dueCards, entities, flashcards, hostOf, masteredCount, nextDue, titleIndex, withScheme } from '../markdown';
 import { urlOf } from '../media';
 import { folderColor, noteById, readableNotes, tabFolder, tabLabel, tabNotes, useStore } from '../store';
@@ -13,14 +13,12 @@ import {
   answer, deleteCard, exportBackup, exportMarkdown, exportSlides, exportVault, install, lastBackupLabel, openGuide, openNews, printTab,
   retryMissed, reveal, startStudy, startTour, studyNotes, toggleAsr, toggleOcr, openMap,
 } from '../features';
-import { bytes, clock, day, dayTime, fmt, plural, time } from '../utils';
-import { ACCENTS, Chip, Formatted, HANDS, LOOKS, Layer, Row, Segmented, StateMark, Switch, THEMES } from './kit';
+import { clock, day, dayTime, plural } from '../utils';
+import { ACCENTS, Chip, Formatted, HANDS, LOOKS, Layer, Row, Section, Segmented, StateMark, Switch, THEMES } from './kit';
 import { Icon } from './icons';
 import { pickFile } from './Files';
 
 const Empty = ({ title, hint }: { title: string; hint?: string }) => <div className="sheet-empty"><p>{title}</p>{hint && <p className="layer-hint">{hint}</p>}</div>;
-const Section = ({ title, show = true, children }: { title: string; show?: boolean; children: React.ReactNode }) =>
-  show ? <section className="sheet-section"><h3>{title}</h3>{children}</section> : null;
 const Btn = ({ label, onClick, primary = false }: { label: string; onClick: () => void; primary?: boolean }) =>
   <button className={'btn' + (primary ? ' primary' : '')} onClick={onClick}>{label}</button>;
 
@@ -235,85 +233,19 @@ function Settings() {
         <h4>Aide</h4>
         <button className="option" onClick={startTour}>Visite guidée</button>
         <button className="option" onClick={openGuide}>Guide d’utilisation</button>
-        <button className="option" onClick={openNews}><span>Quoi de neuf</span><small>{CURRENT.version}</small></button>
+        <button className="option" onClick={openNews}><span>Quoi de neuf</span><small>{VERSION}</small></button>
         <button className="option" onClick={() => openSheet('about')}>À propos</button>
       </div>
     </div>
   );
 }
 
-/* ---------- About, changelog, what's new ---------- */
-const countChanges = (list: Release[]) => CHANGE_KINDS.map(k => ({ ...k, count: list.reduce((t, r) => t + (r.changes[k.kind]?.length || 0), 0) })).filter(k => k.count);
-function releaseDate(date: string) {
-  const [y, m, d] = date.split('-').map(Number);
-  if (!d) return fmt('month', { month: 'long', year: 'numeric' }).format(new Date(y, m - 1));
-  const then = new Date(y, m - 1, d), today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const ago = Math.round((+today - +then) / 864e5);
-  return ago === 0 ? 'Aujourd’hui' : ago === 1 ? 'Hier' : ago > 1 && ago < 7 ? `Il y a ${ago} jours` : fmt('long', { day: 'numeric', month: 'long', year: 'numeric' }).format(then);
-}
-function ChangeGroup({ kind, title, items }: { kind: ChangeKind; title: string; items: string[] }) {
-  const [all, setAll] = useState(items.length <= 5);
-  return (
-    <section className="change-group" data-kind={kind}>
-      <h4><StateMark kind={kind} />{title}<span className="change-count">{items.length}</span></h4>
-      <ul>{(all ? items : items.slice(0, 5)).map(i => <li key={i}>{i}</li>)}</ul>
-      {!all && <button className="text-btn" onClick={() => setAll(true)}>Tout afficher ({items.length})</button>}
-    </section>
-  );
-}
-const Changes = ({ r }: { r: Release }) => <>{CHANGE_KINDS.map(k => r.changes[k.kind]?.length ? <ChangeGroup key={k.kind} kind={k.kind} title={k.title} items={r.changes[k.kind]!} /> : null)}</>;
-function Timeline({ releases, open: openCount = 1 }: { releases: Release[]; open?: number }) {
-  // One release: its version, date and counts are already in the summary above — straight to what changed
-  if (releases.length === 1) return <div className="timeline-bare"><Changes r={releases[0]} /></div>;
-  return (
-    <ol className="timeline">{releases.map((r, i) => (
-      <li key={r.version} className={'release' + (r === CURRENT ? ' is-installed' : '')}>
-        <details open={i < openCount}>
-          <summary>
-            <span className="release-title"><span className="release-node" aria-hidden="true" />{r.version}{r === CURRENT && <span className="badge">Installée</span>}</span>
-            <span className="release-meta">{[releaseDate(r.date), ...countChanges([r]).map(c => plural(c.count, c.one, c.many)), r.legacy && r.legacy !== r.version && 'ex-' + r.legacy].filter(Boolean).join(' · ')}</span>
-          </summary>
-          <Changes r={r} />
-        </details>
-      </li>
-    ))}</ol>
-  );
-}
-function About() {
-  const s = useStore(useShallow(s => ({ info: s.storageInfo, count: s.notes.filter(n => !n.deleted).length })));
-  const built = __BUILD__.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/), when = built && new Date(Date.UTC(+built[1], +built[2] - 1, +built[3], +built[4], +built[5]));
-  return (
-    <>
-      <div className="about-app">
-        <img className="about-icon" src="icons/icon-192.png" alt="" />
-        <div><p className="about-name">Notes</p><p className="about-version">Version {CURRENT.version}{when && <> · {day(when)} {time(when)}</>}</p></div>
-      </div>
-      <Section title="Créé par"><p className="about-text"><b>Fringles</b> · Design et développement</p></Section>
-      <Section title="Vos données"><p className="about-text">Tout reste sur cet appareil, sans compte : rien n’est envoyé sur le cloud. {plural(s.count, 'note', 'notes')}{s.info ? ' · ' + bytes(s.info.used) + (s.info.persisted ? ' · stockage protégé' : '') : ''}.</p></Section>
-      <Section title="Journal des modifications"><Timeline releases={RELEASE_LIST} /></Section>
-      <Section title="Crédits">{CREDITS.map(([a, b]) => <p key={a} className="about-text"><b>{a}</b> · {b}</p>)}</Section>
-    </>
-  );
-}
-function News() {
-  const since = useStore(s => s.newsSince) || CURRENT.version, list = releasesSince(since);
-  return (
-    <>
-      <div className="news">
-        <p className="news-versions"><span className="version-pill">{findRelease(since)?.version}</span><Icon name="arrowRight" /><span className="version-pill is-new">{CURRENT.version}</span></p>
-        <p className="news-title">{plural(list.length, 'nouvelle version', 'nouvelles versions')}</p>
-        <p className="news-counts">{countChanges(list).map(c => <span key={c.kind} className="change-pill" data-kind={c.kind}><Icon name={c.icon} />{plural(c.count, c.one, c.many)}</span>)}</p>
-      </div>
-      <Timeline releases={list} open={list.length} />
-    </>
-  );
-}
+/* ---------- About, what's new, guide: with the changelog, loaded when one of them opens (Changelog.tsx) ---------- */
+const About = lazy(() => import('./Changelog').then(m => ({ default: m.About })));
+const News = lazy(() => import('./Changelog').then(m => ({ default: m.News })));
+const Guide = lazy(() => import('./Changelog').then(m => ({ default: m.Guide })));
 
-/** The guide, from Réglages › Aide: read like a note, kept out of the notes. */
-const Guide = () => <div className="guide-text"><Formatted body={GUIDE} /></div>;
-
-const SHEETS: Record<SheetMode, { title: (center: number | null) => string; Content: () => React.ReactNode; Foot?: () => React.ReactNode }> = {
+const SHEETS: Record<SheetMode, { title: (center: number | null) => string; Content: React.ComponentType; Foot?: () => React.ReactNode }> = {
   study: { title: () => 'Réviser', Content: Study, Foot: StudyFoot },
   map: { title: (c: number | null) => (c !== null ? 'Carte des liens · ' + (noteById(c)?.title || 'Sans titre') : 'Carte des liens'), Content: LinkMap },
   overview: { title: () => tabLabel(useStore.getState().prefs.tab), Content: Overview },
@@ -338,7 +270,7 @@ export function SheetHost() {
       {def && <>
         {!FULL_SHEETS.includes(mode!) && <span className="sheet-grabber" aria-hidden="true" />}
         <div className="sheet-head"><h2 aria-hidden="true">{title}</h2><button className="icon-btn" id="sheet-close" onClick={closeSheet} aria-label="Fermer"><Icon name="close" /></button></div>
-        <div className="sheet-body" key={mode}><def.Content /></div>
+        <div className="sheet-body" key={mode}><Suspense fallback={null}><def.Content /></Suspense></div>
         {Foot && <div className="sheet-foot"><Foot /></div>}
       </>}
     </Layer>

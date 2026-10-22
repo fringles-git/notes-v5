@@ -2,7 +2,7 @@
 import { useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import type { LayerMode, Note } from '../types';
-import { KIND_ICON, KIND_TONE } from '../config';
+import { KIND_ICON } from '../config';
 import { checkStats, entities, noteTools, outline, stripCheck } from '../markdown';
 import { folderColor, get, menuNote, openNote, readableNotes, tabFolder, tabLabel, useStore, type State } from '../store';
 import {
@@ -21,13 +21,14 @@ const Hint = ({ children }: { children: React.ReactNode }) => <p className="laye
 
 function TabRow({ tab, trailing, pressed, onClick }: { tab: string; trailing?: React.ReactNode; pressed?: boolean; onClick: () => void }) {
   const color = useStore(s => (tabFolder(tab) ? folderColor(tabFolder(tab), s.folderColors) : undefined));
-  return <Row icon={KIND_ICON[tab] || { f: 'folder', t: 'hash', c: 'filter' }[tab[0]] || 'folder'} label={tabLabel(tab)} trailing={trailing} pressed={pressed} color={color} tone={KIND_TONE[tab]} onClick={onClick} />;
+  return <Row icon={KIND_ICON[tab] || { f: 'folder', t: 'hash', c: 'filter' }[tab[0]] || 'folder'} label={tabLabel(tab)} trailing={trailing} pressed={pressed} color={color} onClick={onClick} />;
 }
 
 /* ---------- Create (+) ---------- */
 /** + : three ways to capture, the most frequent (Note) nearest the thumb. Icons speak for themselves. */
 function Create() {
-  const tile = (id: string, icon: string, tone: string, label: string, onClick: () => void) => (
+  // Colour only where it means something: amber = create (Note), red = recording (Vocal)
+  const tile = (id: string, icon: string, tone: 'accent' | 'danger' | undefined, label: string, onClick: () => void) => (
     <button className="tile" id={'create-' + id} data-tone={tone} onClick={onClick}>
       <Icon name={icon} /><b>{label}</b>
     </button>
@@ -36,9 +37,9 @@ function Create() {
     <>
       <Title>Créer</Title>
       <div className="tiles" role="group" aria-label="Nouvelle note">
-        {tile('import', 'download', 'blue', 'Importer', () => { useStore.setState({ importTarget: 'new' }); openLayer('import'); })}
-        {tile('mic', 'mic', 'red', 'Vocal', () => { closeLayer(); toggleRecording(); })}
-        {tile('note', 'edit', 'yellow', 'Note', () => { closeLayer(); createAndOpen(); })}
+        {tile('import', 'download', undefined, 'Importer', () => { useStore.setState({ importTarget: 'new' }); openLayer('import'); })}
+        {tile('mic', 'mic', 'danger', 'Vocal', () => { closeLayer(); toggleRecording(); })}
+        {tile('note', 'edit', 'accent', 'Note', () => { closeLayer(); createAndOpen(); })}
       </div>
       <Row icon="calendar" label="Note du jour" trailing={day(Date.now())} onClick={dailyNote} />
     </>

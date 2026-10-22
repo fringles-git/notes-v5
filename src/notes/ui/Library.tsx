@@ -1,6 +1,6 @@
 /** The Library: a page like the note list — a title, the dock stays — with views, folders, tags and collections as tiles. */
 import { useShallow } from 'zustand/react/shallow';
-import { FOLDER_COLORS, KIND_ICON, KIND_TONE, KINDS } from '../config';
+import { FOLDER_COLORS, KIND_ICON, KINDS } from '../config';
 import { entities, tagsOf } from '../markdown';
 import { countIn, folderColor, get, tabLabel, useStore } from '../store';
 import {
@@ -61,7 +61,7 @@ export function Library() {
   live.forEach(n => tagsOf(n).forEach(t => tags.set(t, (tags.get(t) || 0) + 1)));
   const top = Math.max(1, ...tags.values());
   const tile = (t: string, label = tabLabel(t), count: number | string = countIn(state, t), onClick = () => setTab(t)) => (
-    <button key={t} className="lib-tile" data-tone={KIND_TONE[t]} aria-pressed={t !== 'all' && s.tab === t} onClick={onClick}>
+    <button key={t} className="lib-tile" aria-pressed={t !== 'all' && s.tab === t} onClick={onClick}>
       <Icon name={KIND_ICON[t] || 'graph'} />
       <b>{shown(count) ? count : ''}</b>
       <span>{label}</span>

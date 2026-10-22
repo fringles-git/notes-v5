@@ -47,12 +47,6 @@ export const KIND_ICON: Record<string, string> = {
   all: 'all', none: 'folder', locked: 'lock', trash: 'trash',
 };
 
-/** Semantic tones (system colors): same meaning everywhere — red records & deletes, orange dates, green photos… */
-export const KIND_TONE: Record<string, string> = {
-  all: 'gray', week: 'purple', study: 'indigo', lists: 'blue', dated: 'orange', links: 'teal', photos: 'green',
-  audio: 'pink', pdfs: 'red', none: 'gray', locked: 'gray', trash: 'red', map: 'teal',
-};
-
 export const TAB_LABEL: Record<string, string> = {
   all: 'Toutes les notes', week: 'Cette semaine', lists: 'Listes', dated: 'Avec une date', links: 'Liens', photos: 'Photos',
   audio: 'Notes vocales', pdfs: 'PDF', study: 'À réviser', none: 'Sans dossier', trash: 'Corbeille', locked: 'Notes masquées',
@@ -60,16 +54,16 @@ export const TAB_LABEL: Record<string, string> = {
 
 /** What an empty note can become (¦ = caret). Shown in the note, under the placeholder, while it is empty. */
 export const TEMPLATES = [
-  { id: 'list', label: 'Liste', icon: 'checklist', tone: 'blue', title: () => '', body: '- [ ] ¦' },
-  { id: 'card', label: 'Carte à réviser', icon: 'study', tone: 'indigo', title: () => '', body: '¦ :: ' },
+  { id: 'list', label: 'Liste', icon: 'checklist', title: () => '', body: '- [ ] ¦' },
+  { id: 'card', label: 'Carte à réviser', icon: 'study', title: () => '', body: '¦ :: ' },
   {
-    id: 'meeting', label: 'Réunion', icon: 'all', tone: 'orange', title: (d: Date) => 'Réunion du ' + d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }),
+    id: 'meeting', label: 'Réunion', icon: 'all', title: (d: Date) => 'Réunion du ' + d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }),
     body: '## Participants\n- ¦\n\n## Ordre du jour\n1. \n\n## Décisions\n- \n\n## Actions\n- [ ] ',
   },
-  { id: 'project', label: 'Projet', icon: 'outline', tone: 'teal', title: () => '', body: '## Objectif\n¦\n\n## Étapes\n- [ ] \n\n## Notes\n' },
-  { id: 'study', label: 'Fiche de révision', icon: 'doc', tone: 'purple', title: () => '', body: '## Points clés\n- ¦\n\n## Cartes\nQuestion :: Réponse' },
+  { id: 'project', label: 'Projet', icon: 'outline', title: () => '', body: '## Objectif\n¦\n\n## Étapes\n- [ ] \n\n## Notes\n' },
+  { id: 'study', label: 'Fiche de révision', icon: 'doc', title: () => '', body: '## Points clés\n- ¦\n\n## Cartes\nQuestion :: Réponse' },
   {
-    id: 'today', label: 'Journal du jour', icon: 'calendar', tone: 'green', body: '#journal\n\n¦',
+    id: 'today', label: 'Journal du jour', icon: 'calendar', body: '#journal\n\n¦',
     title: (d: Date) => { const t = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); return t[0].toUpperCase() + t.slice(1); },
   },
 ] as const;

@@ -1,7 +1,7 @@
 /** The bottom of the screen, within thumb reach: navigation island + the + button, the in-dock search, selection and recording bars. */
 import { useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { CONFIG, SEARCH_KINDS, KIND_ICON, KIND_TONE } from '../config';
+import { CONFIG, SEARCH_KINDS, KIND_ICON } from '../config';
 import { filterNotes, get, inTrash, KIND_TEST, tabLabel, useStore, visibleNotes } from '../store';
 import {
   allSelected, clearRecents, closeSearch, deleteSelection, goHome, endSelecting, hideSelection, openSearch, pinSelection,
@@ -109,7 +109,7 @@ function SearchDock() {
     <div className="dock search-dock" role="search">
       <div className="search-chips" role="group" aria-label="Filtrer les résultats">
         {/* No "Tout" chip: no filter is the default; a filter chip toggles itself off */}
-        {kinds.map(k => <button key={k} className="chip glass" data-tone={KIND_TONE[k]} aria-pressed={s.kind === k} onClick={() => toggleKind(k)}><Icon name={KIND_ICON[k]} />{tabLabel(k)}</button>)}
+        {kinds.map(k => <button key={k} className="chip glass" aria-pressed={s.kind === k} onClick={() => toggleKind(k)}><Icon name={KIND_ICON[k]} />{tabLabel(k)}</button>)}
         {(s.query.trim() || s.kind) && <button className="chip glass is-quiet" onClick={saveCollection} aria-label="Enregistrer cette recherche comme collection"><Icon name="filter" />Enregistrer</button>}
         {recents.length > 0 && <span className="chip-group" role="group" aria-label="Recherches récentes">
           {recents.map(r => <button key={r} className="chip glass is-quiet" onClick={() => { setQuery(r); input.current?.focus(); }} aria-label={'Rechercher ' + r}><Icon name="history" />{r}</button>)}

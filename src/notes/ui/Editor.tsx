@@ -87,16 +87,16 @@ function Player({ att, name }: { att: Attachment; name: string }) {
   return (
     <div className="player">
       <audio ref={ref} preload="metadata" src={urlOf(att)} />
-      <button className="player-play" onClick={() => (ref.current!.paused ? ref.current!.play().catch(() => {}) : ref.current!.pause())}
+      <button className="ctl is-icon is-ink" onClick={() => (ref.current!.paused ? ref.current!.play().catch(() => {}) : ref.current!.pause())}
         aria-label={(playing ? 'Pause' : 'Lire') + ' le message audio' + name}><Icon name={playing ? 'pause' : 'play'} /></button>
       <input className="seek" type="range" min={0} max={1000} value={dur ? Math.round((t / dur) * 1000) : 0} aria-label={'Position dans l’audio' + name}
         style={{ '--progress': (dur ? (t / dur) * 100 : 0) + '%' } as React.CSSProperties}
         onChange={e => { if (ref.current!.duration) ref.current!.currentTime = (+e.target.value / 1000) * ref.current!.duration; }} />
       <span className="player-time">{clock(Math.floor(t))}{dur ? ' / ' + clock(Math.round(dur)) : ''}</span>
       <span className="player-row">
-        <button className="player-btn" onClick={() => skip(-15)} aria-label="Reculer de 15 secondes">−15 s</button>
-        <button className="player-btn" onClick={cycleRate} aria-label={'Vitesse : ' + rate(r)}>{rate(r)}</button>
-        <button className="player-btn" onClick={() => skip(15)} aria-label="Avancer de 15 secondes">+15 s</button>
+        <button className="ctl is-s is-fill-strong" onClick={() => skip(-15)} aria-label="Reculer de 15 secondes">−15 s</button>
+        <button className="ctl is-s is-fill-strong" onClick={cycleRate} aria-label={'Vitesse : ' + rate(r)}>{rate(r)}</button>
+        <button className="ctl is-s is-fill-strong" onClick={() => skip(15)} aria-label="Avancer de 15 secondes">+15 s</button>
       </span>
     </div>
   );
@@ -112,7 +112,7 @@ function LiveText({ note, att, quiet }: { note: Note; att: Attachment; quiet?: b
   };
   const audio = att.type === 'audio';
   return (
-    <button className={quiet ? 'text-btn att-live' : 'chip glass att-live'} disabled={busy} onClick={run}
+    <button className={quiet ? 'ctl is-link att-live' : 'ctl is-s glass att-live'} disabled={busy} onClick={run}
       aria-label={audio ? 'Ajouter la transcription de cet enregistrement à la note' : 'Ajouter le texte de ce fichier à la note'}>
       {!quiet && <Icon name="liveText" />}{busy ? (audio ? 'Transcription…' : 'Lecture…') : audio ? 'Ajouter la transcription' : 'Ajouter le texte'}
     </button>
@@ -130,10 +130,10 @@ function Attachments({ note }: { note: Note }) {
               <Icon name="doc" />
               <span className="att-pdf-text"><span className="pdf-name">{a.name || 'Document PDF'}</span><span className="pdf-meta">{pdfMeta(a)}</span></span>
               <LiveText note={note} att={a} quiet />
-              <button className="text-btn" onClick={openUrl(urlOf(a))}>Ouvrir</button>
+              <button className="ctl is-link" onClick={openUrl(urlOf(a))}>Ouvrir</button>
             </>
               : <><img alt={(note.title || 'Image jointe') + nth(i)} src={urlOf(a)} /><LiveText note={note} att={a} /></>}
-          <button className="att-remove" onClick={() => removeAtt(i)} aria-label={'Retirer la pièce jointe' + nth(i)}><Icon name="close" /></button>
+          <button className="ctl is-s is-icon att-remove" onClick={() => removeAtt(i)} aria-label={'Retirer la pièce jointe' + nth(i)}><Icon name="close" /></button>
         </div>
       ))}
     </div>
@@ -145,13 +145,13 @@ function FormatStrip({ state }: { state: FormatState | null }) {
   const level = state ? headingLevel(state.kind) : 0;
   return (
     <div className="format-strip island glass" role="toolbar" aria-label="Mise en forme">
-      <button className="icon-btn format-toggle" onClick={toggleFormatBar} aria-label="Mise en forme" aria-pressed="true"><span className="glyph" aria-hidden="true">Aa</span></button>
+      <button className="ctl is-l is-icon format-toggle" onClick={toggleFormatBar} aria-label="Mise en forme" aria-pressed="true"><span className="glyph" aria-hidden="true">Aa</span></button>
       <span className="format-sep" aria-hidden="true" />
       {FORMAT_TOOLS.map(t => {
         const heading = t.id === 'heading', label = heading && level ? `${t.label} (niveau ${level})` : t.label;
         const on = !!state && (heading ? level > 0 : (t.id === 'card' ? state.card : state.kind === t.id || state.marks.includes(t.id as never)));
         return (
-          <button key={t.id} className="icon-btn" onClick={() => applyFormat(t.id)} aria-label={label} aria-pressed={on} title={finePointer() ? `${label} (${MOD}${t.keys})` : undefined}>
+          <button key={t.id} className="ctl is-l is-icon" onClick={() => applyFormat(t.id)} aria-label={label} aria-pressed={on} title={finePointer() ? `${label} (${MOD}${t.keys})` : undefined}>
             {t.icon ? <Icon name={t.icon} /> : <span className={'glyph glyph-' + t.id} aria-hidden="true">{t.glyph}{heading && level ? <sub>{level}</sub> : null}</span>}
           </button>
         );
@@ -238,11 +238,11 @@ export function Editor() {
       <div className="editor-head">
         {note && !trashed && <SaveStatus key={note.id} />}
         <span className="editor-grabber" aria-hidden="true" />
-        <button className="icon-btn split-only" onClick={closeEditor} aria-label="Fermer la note"><Icon name="close" /></button>
+        <button className="ctl is-icon split-only" onClick={closeEditor} aria-label="Fermer la note"><Icon name="close" /></button>
       </div>
       <div className="editor-body">
         {note && !trashed && (
-          <button className="folder-chip" onClick={openPicker} aria-haspopup="dialog" aria-label={'Dossier : ' + (note.folder || 'aucun') + '. Déplacer'}>
+          <button className="ctl is-s is-fill is-muted folder-chip" onClick={openPicker} aria-haspopup="dialog" aria-label={'Dossier : ' + (note.folder || 'aucun') + '. Déplacer'}>
             {note.folder ? <FolderTag folder={note.folder} /> : <><Icon name="folder" />Sans dossier</>}
           </button>
         )}
@@ -261,7 +261,7 @@ export function Editor() {
         {blank && <>
           <div className="starters" role="group" aria-label="Commencer par">
             {TEMPLATES.map(t => (
-              <button key={t.id} className="starter" onPointerDown={e => e.preventDefault()} onClick={() => applyTemplate(t.id)}><Icon name={t.icon} />{t.label}</button>
+              <button key={t.id} className="ctl is-l is-line is-start" onPointerDown={e => e.preventDefault()} onClick={() => applyTemplate(t.id)}><Icon name={t.icon} />{t.label}</button>
             ))}
           </div>
           <div className="editor-blank-fill" aria-hidden="true" onClick={() => (s.reading ? editAt(null) : body.current?.focus())} />
@@ -279,19 +279,19 @@ export function Editor() {
         <div className="thumb-row">
           {formatting ? <FormatStrip state={format} /> : !trashed && (
             <div className="island glass" role="toolbar" aria-label="Outils de la note">
-              <button className="icon-btn" onClick={toggleFormatBar} aria-label="Mise en forme" aria-pressed="false"><span className="glyph" aria-hidden="true">Aa</span></button>
-              <button className="icon-btn" onClick={() => applyFormat('check')} aria-label="Case à cocher" aria-pressed={format?.kind === 'check'}><Icon name="checklist" /></button>
-              <button className="icon-btn" onClick={() => openImport('open')} aria-label="Joindre une photo, un audio ou un PDF" aria-haspopup="dialog"><Icon name="attach" /></button>
-              {selected && !s.reading && <button className="icon-btn" onClick={extractSelection} aria-label="Créer une note avec la sélection"><Icon name="extract" /></button>}
+              <button className="ctl is-l is-icon" onClick={toggleFormatBar} aria-label="Mise en forme" aria-pressed="false"><span className="glyph" aria-hidden="true">Aa</span></button>
+              <button className="ctl is-l is-icon" onClick={() => applyFormat('check')} aria-label="Case à cocher" aria-pressed={format?.kind === 'check'}><Icon name="checklist" /></button>
+              <button className="ctl is-l is-icon" onClick={() => openImport('open')} aria-label="Joindre une photo, un audio ou un PDF" aria-haspopup="dialog"><Icon name="attach" /></button>
+              {selected && !s.reading && <button className="ctl is-l is-icon" onClick={extractSelection} aria-label="Créer une note avec la sélection"><Icon name="extract" /></button>}
             </div>
           )}
           <div className="thumb-group">
             {!formatting && (
               <div className="island glass">
-                <button className="icon-btn" id="note-more" onClick={() => note && openNoteMenu(note.id)} aria-label="Plus : épingler, déplacer, rappel, partager…" aria-haspopup="dialog"><Icon name="more" /></button>
+                <button className="ctl is-l is-icon" id="note-more" onClick={() => note && openNoteMenu(note.id)} aria-label="Plus : épingler, déplacer, rappel, partager…" aria-haspopup="dialog"><Icon name="more" /></button>
               </div>
             )}
-            <button className="fab split-hidden" onClick={closeEditor} aria-label="Terminé"><Icon name="check" /></button>
+            <button className="ctl is-xl is-icon is-accent fab split-hidden" onClick={closeEditor} aria-label="Terminé"><Icon name="check" /></button>
           </div>
         </div>
       </div>

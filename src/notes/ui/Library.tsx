@@ -17,18 +17,18 @@ function FolderEditRow({ folder }: { folder: string }) {
   return (
     <>
       <div className="row row-static" data-color={s.color}>
-        <button className="icon-btn row-color" onClick={() => patchLayer({ coloring: s.coloring ? null : folder, renaming: null })} aria-expanded={s.coloring}
+        <button className="ctl is-icon row-color" onClick={() => patchLayer({ coloring: s.coloring ? null : folder, renaming: null })} aria-expanded={s.coloring}
           aria-label={`Couleur de ${folder} : ${FOLDER_COLORS[s.color - 1]}`}><Icon name="folder" /></button>
         <span className="row-label">{folder}</span>
         <span className="row-actions">
-          <button className="icon-btn" onClick={() => patchLayer({ renaming: folder })} aria-label={'Renommer ' + folder}><Icon name="edit" /></button>
-          <button className="icon-btn danger-text" onClick={() => deleteFolder(folder)} aria-label={'Supprimer le dossier ' + folder}><Icon name="trash" /></button>
+          <button className="ctl is-icon" onClick={() => patchLayer({ renaming: folder })} aria-label={'Renommer ' + folder}><Icon name="edit" /></button>
+          <button className="ctl is-icon is-danger" onClick={() => deleteFolder(folder)} aria-label={'Supprimer le dossier ' + folder}><Icon name="trash" /></button>
         </span>
       </div>
       {s.coloring && (
         <div className="swatches" role="group" aria-label={'Couleur de ' + folder}>
           {FOLDER_COLORS.map((c, i) => (
-            <button key={c} className="swatch" data-color={i + 1} onClick={() => setFolderColor(folder, i + 1)} aria-pressed={s.color === i + 1} aria-label={c}><Icon name="check" /></button>
+            <button key={c} className="ctl is-s is-icon swatch" data-color={i + 1} onClick={() => setFolderColor(folder, i + 1)} aria-pressed={s.color === i + 1} aria-label={c}><Icon name="check" /></button>
           ))}
         </div>
       )}
@@ -43,8 +43,8 @@ function CollectionEditRow({ name }: { name: string }) {
       <Icon name="filter" />
       <span className="row-label">{name}</span>
       <span className="row-actions">
-        <button className="icon-btn" onClick={() => patchLayer({ renaming: 'c:' + name })} aria-label={'Renommer ' + name}><Icon name="edit" /></button>
-        <button className="icon-btn danger-text" onClick={() => deleteCollection(name)} aria-label={'Supprimer la collection ' + name}><Icon name="trash" /></button>
+        <button className="ctl is-icon" onClick={() => patchLayer({ renaming: 'c:' + name })} aria-label={'Renommer ' + name}><Icon name="edit" /></button>
+        <button className="ctl is-icon is-danger" onClick={() => deleteCollection(name)} aria-label={'Supprimer la collection ' + name}><Icon name="trash" /></button>
       </span>
     </div>
   );
@@ -74,7 +74,7 @@ export function Library() {
         <div className="header-bar">
           <h1 id="page-title">Bibliothèque</h1>
           <div className="island glass header-tools">
-            <button className="icon-btn" onClick={toggleEditFolders} aria-label="Modifier les dossiers et collections" aria-pressed={s.edit}><Icon name="edit" /></button>
+            <button className="ctl is-icon" onClick={toggleEditFolders} aria-label="Modifier les dossiers et collections" aria-pressed={s.edit}><Icon name="edit" /></button>
           </div>
         </div>
         <p className="page-sub">{plural(live.length, 'note', 'notes')}{s.folders.length ? ' · ' + plural(s.folders.length, 'dossier', 'dossiers') : ''}</p>
@@ -129,7 +129,7 @@ export function Library() {
         <section className="lib-section">
           <h2 className="list-heading">Collections</h2>
           {s.edit ? <div className="lib-rows">{s.collections.map(c => <CollectionEditRow key={c.name} name={c.name} />)}</div>
-            : <div className="chips">{s.collections.map(c => <button key={c.name} className="chip" aria-pressed={s.tab === 'c:' + c.name} onClick={() => setTab('c:' + c.name)}><Icon name="filter" />{c.name}</button>)}</div>}
+            : <div className="chips">{s.collections.map(c => <button key={c.name} className="ctl is-s is-fill" aria-pressed={s.tab === 'c:' + c.name} onClick={() => setTab('c:' + c.name)}><Icon name="filter" />{c.name}</button>)}</div>}
         </section>
       )}
 

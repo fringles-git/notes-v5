@@ -72,7 +72,7 @@ export function Layer({ open, onClose, label, className, children, initialFocus,
       <div ref={panel} className={className} role="dialog" aria-modal={!free} aria-label={label} tabIndex={-1}
         data-open={open || undefined} data-closing={closing || undefined} data-anchored={placed ? '' : undefined} data-drawer={side ? '' : undefined}
         data-inspector={free ? '' : undefined} style={{ ...placed, ...style }} {...data}>
-        {free && <button className="icon-btn panel-close" onClick={onClose} aria-label="Fermer le panneau"><Icon name="close" /></button>}
+        {free && <button className="ctl is-icon panel-close" onClick={onClose} aria-label="Fermer le panneau"><Icon name="close" /></button>}
         {shown}
       </div>
     </>
@@ -95,7 +95,7 @@ export function Row({ icon, label, trailing, onClick, pressed, color, disabled, 
 }
 
 export const Chip = ({ icon, label, onClick, aria, className = '' }: { icon: string; label: string; onClick: () => void; aria?: string; className?: string }) => (
-  <button className={'chip ' + className} onClick={onClick} aria-label={aria}>
+  <button className={'ctl is-s is-fill ' + className} onClick={onClick} aria-label={aria}>
     <Icon name={icon} />
     <span>{label}</span>
   </button>
@@ -110,7 +110,7 @@ export function InlineForm({ onSubmit, button, autoFocus = true, inputProps }: {
   return (
     <div className="inline-form">
       <input ref={ref} {...inputProps} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); submit(); } }} />
-      <button onClick={submit} aria-label={button}><Icon name="check" /></button>
+      <button className="ctl is-icon is-ink" onClick={submit} aria-label={button}><Icon name="check" /></button>
     </div>
   );
 }

@@ -25,7 +25,7 @@ function ChangeGroup({ kind, title, items }: { kind: ChangeKind; title: string; 
     <section className="change-group" data-kind={kind}>
       <h4><StateMark kind={kind} />{title}<span className="change-count">{items.length}</span></h4>
       <ul>{(all ? items : items.slice(0, 5)).map(i => <li key={i}>{i}</li>)}</ul>
-      {!all && <button className="text-btn" onClick={() => setAll(true)}>Tout afficher ({items.length})</button>}
+      {!all && <button className="ctl is-link" onClick={() => setAll(true)}>Tout afficher ({items.length})</button>}
     </section>
   );
 }

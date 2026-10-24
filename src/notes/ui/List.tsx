@@ -25,14 +25,14 @@ export function Header() {
     <header className="app-header" id="app-header">
       <div className="pull-hint" aria-hidden="true"><Icon name="search" /><span>Rechercher</span></div>
       <div className="header-bar">
-        {s.tab !== 'all' && <button className="back-chip glass" onClick={goLibrary}><Icon name="back" /><span>Bibliothèque</span></button>}
+        {s.tab !== 'all' && <button className="ctl is-s glass back-chip" onClick={goLibrary}><Icon name="back" /><span>Bibliothèque</span></button>}
         <h1 id="page-title" data-color={folder ? folderColor(folder, s.colors) : undefined} onClick={goHome}>
           {title}{count > 0 && <span className="title-count" aria-hidden="true">{count}</span>}
         </h1>
         <div className="island glass header-tools" id="view-tools">
-          <button className="icon-btn" onClick={() => setPref('view', s.prefs.view === 'cards' ? 'list' : 'cards')}
+          <button className="ctl is-icon" onClick={() => setPref('view', s.prefs.view === 'cards' ? 'list' : 'cards')}
             aria-label={s.prefs.view === 'cards' ? 'Afficher en liste compacte' : 'Afficher en cartes'}><Icon name={s.prefs.view === 'cards' ? 'list' : 'cards'} /></button>
-          <button className={'icon-btn' + (sorted ? ' has-dot' : '')} onClick={() => openLayer('sort')} aria-haspopup="dialog" aria-label={'Trier' + (sorted ? ' (modifié)' : '')}><Icon name="sort" /></button>
+          <button className={'ctl is-icon' + (sorted ? ' has-dot' : '')} onClick={() => openLayer('sort')} aria-haspopup="dialog" aria-label={'Trier' + (sorted ? ' (modifié)' : '')}><Icon name="sort" /></button>
         </div>
       </div>
       <span className="visually-hidden" aria-live="polite">
@@ -52,14 +52,14 @@ export function InfoBar() {
     backup: backupDue(s) && s.prefs.tab === 'all' && !s.selecting && !s.searchOpen,
   })));
   const pills = [
-    s.trashCount > 0 && <button key="trash" className="pill danger" onClick={emptyTrash}>Vider la corbeille ({s.trashCount})</button>,
-    /^[ftc]:/.test(s.tab) && !s.selecting && !s.query.trim() && <button key="ov" className="pill" onClick={() => openSheet('overview')}>Vue d’ensemble</button>,
-    s.backup && <button key="backup" className="pill" onClick={exportBackup}>
+    s.trashCount > 0 && <button key="trash" className="ctl is-s is-line is-start is-danger" onClick={emptyTrash}>Vider la corbeille ({s.trashCount})</button>,
+    /^[ftc]:/.test(s.tab) && !s.selecting && !s.query.trim() && <button key="ov" className="ctl is-s is-line is-start is-muted" onClick={() => openSheet('overview')}>Vue d’ensemble</button>,
+    s.backup && <button key="backup" className="ctl is-s is-line is-start is-muted" onClick={exportBackup}>
       {s.lastBackup ? `Dernière sauvegarde il y a ${daysAgo(s.lastBackup)} jours. Exporter` : 'Aucune sauvegarde. Exporter les notes'}
     </button>,
-    s.hint && <button key="hint" className="pill" onClick={() => dismissHint(s.hint!.id)} aria-label={'Masquer l’astuce : ' + s.hint.text}>{s.hint.text}<Icon name="close" /></button>,
-    s.tab === 'locked' && s.unlocked && <button key="pin" className="pill" onClick={changePin}>Changer le code PIN</button>,
-    s.ios && <button key="ios" className="pill" onClick={() => openLayer('ios-install')}>Protéger mes notes sur iPhone</button>,
+    s.hint && <button key="hint" className="ctl is-s is-line is-start is-muted" onClick={() => dismissHint(s.hint!.id)} aria-label={'Masquer l’astuce : ' + s.hint.text}>{s.hint.text}<Icon name="close" /></button>,
+    s.tab === 'locked' && s.unlocked && <button key="pin" className="ctl is-s is-line is-start is-muted" onClick={changePin}>Changer le code PIN</button>,
+    s.ios && <button key="ios" className="ctl is-s is-line is-start is-muted" onClick={() => openLayer('ios-install')}>Protéger mes notes sur iPhone</button>,
   ].filter(Boolean);
   return pills.length ? <div className="info-bar">{pills}</div> : null;
 }
@@ -140,7 +140,7 @@ function Wave({ noteId, att }: { noteId: number; att: NonNullable<ReturnType<typ
   const progress = player && dur ? player.time / dur : 0, peaks = att.peaks || Array(CONFIG.wavePeaks).fill(0);
   return (
     <>
-      <button className="wave-play" onClick={() => playCard(noteId, urlOf(att))} aria-label={player?.playing ? 'Pause' : 'Lire l’audio'}>
+      <button className="ctl is-s is-icon is-ink wave-play" onClick={() => playCard(noteId, urlOf(att))} aria-label={player?.playing ? 'Pause' : 'Lire l’audio'}>
         <Icon name={player?.playing ? 'pause' : 'play'} />
       </button>
       <span className={'wave' + (player?.playing ? ' is-playing' : '')} aria-hidden="true">
@@ -212,7 +212,7 @@ function CardFooter({ note }: { note: Note }) {
 /** With a mouse, hovering a card offers its three most used actions (touch has the swipes). Mouse only: out of the Tab order. */
 function QuickActions({ note, title }: { note: Note; title: string }) {
   const act = (label: string, icon: string, run: () => void, danger = false) => (
-    <button className={danger ? 'danger' : undefined} tabIndex={-1} onClick={() => onCard(note.id, run)} aria-label={label + ' : ' + title} title={label}><Icon name={icon} /></button>
+    <button className={'ctl is-s is-icon ' + (danger ? 'is-danger' : 'is-muted')} tabIndex={-1} onClick={() => onCard(note.id, run)} aria-label={label + ' : ' + title} title={label}><Icon name={icon} /></button>
   );
   return (
     <span className="card-actions">
@@ -242,7 +242,7 @@ const Card = memo(function Card({ note, inShelf, grip, selected, selecting, isOp
             <Highlight text={title} query={query} />
           </button>
         </h3>
-        {!selecting && <button className="card-more" onClick={() => openNoteMenu(note.id)} aria-label={'Actions : ' + title} aria-haspopup="dialog"><Icon name="more" /></button>}
+        {!selecting && <button className="ctl is-s is-icon is-faint card-more" onClick={() => openNoteMenu(note.id)} aria-label={'Actions : ' + title} aria-haspopup="dialog"><Icon name="more" /></button>}
       </div>
       {!selecting && !note.deleted && <QuickActions note={note} title={title} />}
       <p className="card-meta">
@@ -268,12 +268,12 @@ function FirstUse() {
       <h2 id="first-use-title">Votre première note</h2>
       <p>Écrivez, cochez, dictez ou importez. Tout reste sur cet appareil, même hors ligne.</p>
       <div className="first-actions">
-        <button className="first-action is-main" onClick={() => createAndOpen()}><Icon name="edit" />Note</button>
-        <button className="first-action" onClick={() => fromTemplate('list')}><Icon name="checklist" />Liste</button>
-        <button className="first-action" onClick={toggleRecording}><Icon name="mic" />Vocal</button>
-        <button className="first-action" onClick={() => openImport('new')} aria-haspopup="dialog"><Icon name="download" />Importer</button>
+        <button className="ctl is-xl is-start is-accent" onClick={() => createAndOpen()}><Icon name="edit" />Note</button>
+        <button className="ctl is-xl is-start is-fill" onClick={() => fromTemplate('list')}><Icon name="checklist" />Liste</button>
+        <button className="ctl is-xl is-start is-fill" onClick={toggleRecording}><Icon name="mic" />Vocal</button>
+        <button className="ctl is-xl is-start is-fill" onClick={() => openImport('new')} aria-haspopup="dialog"><Icon name="download" />Importer</button>
       </div>
-      <button className="text-btn" onClick={openGuide}>Lire le guide</button>
+      <button className="ctl is-link" onClick={openGuide}>Lire le guide</button>
     </section>
   );
 }
@@ -369,7 +369,7 @@ export function NoteList({ onShown }: { onShown: (notes: Note[]) => void }) {
   return (
     <main className={'note-list' + (cards ? ' cards' : '') + (compact ? ' is-compact' : '')} id="note-list" ref={ref}>
       {body}
-      {left > 0 && <button className="text-btn list-more" ref={more} onClick={next}>Afficher {plural(Math.min(left, CONFIG.pageSize), 'note', 'notes')} de plus</button>}
+      {left > 0 && <button className="ctl is-link list-more" ref={more} onClick={next}>Afficher {plural(Math.min(left, CONFIG.pageSize), 'note', 'notes')} de plus</button>}
     </main>
   );
 }

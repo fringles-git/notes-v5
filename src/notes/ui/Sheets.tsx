@@ -20,7 +20,7 @@ import { pickFile } from './Files';
 
 const Empty = ({ title, hint }: { title: string; hint?: string }) => <div className="sheet-empty"><p>{title}</p>{hint && <p className="layer-hint">{hint}</p>}</div>;
 const Btn = ({ label, onClick, primary = false }: { label: string; onClick: () => void; primary?: boolean }) =>
-  <button className={'btn' + (primary ? ' primary' : '')} onClick={onClick}>{label}</button>;
+  <button className={'ctl is-l ' + (primary ? 'is-ink' : 'is-fill-strong')} onClick={onClick}>{label}</button>;
 
 /* ---------- Study ---------- */
 function Study() {
@@ -53,7 +53,7 @@ function Study() {
         {s.revealed ? <span className="flashcard-a" aria-live="polite">{item.card.a}</span> : <span className="flashcard-hint">Touchez pour voir la réponse</span>}
         <span className="flashcard-source">{noteById(item.noteId)?.title || 'Sans titre'}</span>
       </button>
-      <button className="text-btn study-delete" onClick={deleteCard}>Supprimer la carte</button>
+      <button className="ctl is-muted study-delete" onClick={deleteCard}>Supprimer la carte</button>
     </>
   );
 }
@@ -266,10 +266,10 @@ export function SheetHost() {
   return (
     <Layer open={!!mode} onClose={closeSheet} label={title} className="sheet glass" drawer={!!mode && SIDE_SHEETS.includes(mode)}
       data={{ 'data-mode': mode || undefined, 'data-drag': mode && !FULL_SHEETS.includes(mode) ? '' : undefined }}
-      initialFocus={() => document.querySelector<HTMLElement>('.sheet-foot .primary') || document.getElementById('sheet-close')}>
+      initialFocus={() => document.querySelector<HTMLElement>('.sheet-foot .is-ink') || document.getElementById('sheet-close')}>
       {def && <>
         {!FULL_SHEETS.includes(mode!) && <span className="sheet-grabber" aria-hidden="true" />}
-        <div className="sheet-head"><h2 aria-hidden="true">{title}</h2><button className="icon-btn" id="sheet-close" onClick={closeSheet} aria-label="Fermer"><Icon name="close" /></button></div>
+        <div className="sheet-head"><h2 aria-hidden="true">{title}</h2><button className="ctl is-icon" id="sheet-close" onClick={closeSheet} aria-label="Fermer"><Icon name="close" /></button></div>
         <div className="sheet-body" key={mode}><Suspense fallback={null}><def.Content /></Suspense></div>
         {Foot && <div className="sheet-foot"><Foot /></div>}
       </>}
@@ -283,7 +283,7 @@ export function Toast() {
     <div className="toast glass" key={t.id} role="status">
       {t.kind && <StateMark kind={t.kind} />}
       <span>{t.message}</span>
-      {t.action && <button onClick={runToastAction}>{t.label}</button>}
+      {t.action && <button className="ctl is-s is-ink" onClick={runToastAction}>{t.label}</button>}
     </div>
   ) : null;
 }

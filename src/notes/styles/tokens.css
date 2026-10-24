@@ -96,6 +96,7 @@
 
   /* Size */
   --tap: 44px;
+  --ctl-s: 34px;   /* a small control (chip, pill, ⋮): drawn at 34, touched at --tap */
   --dock-btn: 48px;
   --fab: 58px;
   --layout-max: 1180px;

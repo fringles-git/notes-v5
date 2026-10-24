@@ -21,7 +21,7 @@ All 12 home screens (390 / 768 / 1280 × both looks × light / dark), the editor
 - **Colour meanings**: amber = create and pinned, blue = selection and links, red = delete and recording, green = done,
   ink = focus, primary buttons and progress. Both looks and all three accents keep them.
 - **Thumb-first layout**: the dock and + at the bottom, mirrored for left-handers; menus open above the dock; sheets come up from the bottom edge on a phone.
-- **Sizes**: 44px minimum touch targets (chips are drawn at 38px and touched at 44px), 48px dock buttons, a 58px +,
+- **Sizes**: 44px minimum touch targets (small controls — chips, pills, ⋮ — are drawn at 34px and touched at 44px), 48px dock buttons, a 58px +,
   16px inputs, and content that clears the dock and the keyboard (`--dock-space`).
 - **Glass only on what floats**: dock, menus, sheets and toasts. Content is solid, and glass is never stacked on glass.
 - **Accessibility**: muted text ≥7:1. High contrast, reduced motion, reduced transparency and forced colours are all honoured, and the device's preference wins over the look.
@@ -141,7 +141,7 @@ Shared foundation (`tokens.css`); look values in `looks.css` (Glass · Paper).
 | Motion | `--press` | .97 (1 under reduced motion) |
 | | `--ease` | cubic-bezier(.32, .72, 0, 1) |
 | | `--fast / base / slow` | 140 / 240 / 380ms (1ms under reduced motion) |
-| Size | `--tap / dock-btn / fab` | 44 / 48 / 58px |
+| Size | `--ctl-s / tap / dock-btn / fab` | 34 / 44 / 48 / 58px: the four control sizes (`.ctl.is-s` · `.ctl` · `.is-l` · `.is-xl`) |
 | | `--hairline` | .5px · Paper 1px |
 | | `--dock-lift` | 4px · Paper 0 |
 | Colour | `--color-bg / card / raised / editor / text / text-muted / text-faint` | per look (section 2) |

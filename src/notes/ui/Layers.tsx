@@ -129,7 +129,7 @@ const IosInstall = () => (
       <li>Choisissez <b>Sur l’écran d’accueil</b></li>
       <li>Ouvrez Notes depuis la nouvelle icône</li>
     </ol>
-    <div className="layer-foot end"><button className="text-btn" onClick={() => { setPref('iosInstallDismissed', true); closeLayer(); }}>Ne plus afficher</button></div>
+    <div className="layer-foot end"><button className="ctl is-link" onClick={() => { setPref('iosInstallDismissed', true); closeLayer(); }}>Ne plus afficher</button></div>
   </>
 );
 
@@ -144,7 +144,7 @@ function Picker() {
       <hr />
       {s.folders.map(f => row('f:' + f))}
       <hr />
-      {s.newFolder ? <NewFolder /> : <div className="layer-foot end"><button className="icon-btn" onClick={toggleNewFolder} aria-label="Nouveau dossier"><Icon name="folderNew" /></button></div>}
+      {s.newFolder ? <NewFolder /> : <div className="layer-foot end"><button className="ctl is-icon" onClick={toggleNewFolder} aria-label="Nouveau dossier"><Icon name="folderNew" /></button></div>}
     </>
   );
 }
@@ -162,13 +162,13 @@ function Pin() {
     <>
       <p className="layer-title" id="pin-title">{t.title(s.has)}</p>
       <Hint>{device ? 'Face ID ou empreinte, ou votre code PIN.' : t.hint}</Hint>
-      {device && <button className="btn primary pin-device" onClick={unlockWithDevice}><Icon name="biometric" />Face ID ou empreinte</button>}
+      {device && <button className="ctl is-l is-ink pin-device" onClick={unlockWithDevice}><Icon name="biometric" />Face ID ou empreinte</button>}
       <InlineForm key={s.step} autoFocus={!device} button="Valider" onSubmit={async (v, input) => { if (!(await submitPin(v))) { input.value = ''; input.focus(); } }}
         inputProps={{ className: 'pin-input', type: 'password', inputMode: 'numeric', maxLength: 8, autoComplete: 'off', 'aria-labelledby': 'pin-title' }} />
       {s.step !== 'new' && <>
         <div className="layer-foot">
-          <button className="text-btn" onClick={() => patchLayer({ pinStep: s.step === 'auth' ? 'change' : 'auth', resetArmed: false })}>{s.step === 'auth' ? 'Changer le code' : 'Retour'}</button>
-          <button className={'text-btn' + (s.armed ? ' armed' : '')} onClick={resetPin}>
+          <button className="ctl is-link" onClick={() => patchLayer({ pinStep: s.step === 'auth' ? 'change' : 'auth', resetArmed: false })}>{s.step === 'auth' ? 'Changer le code' : 'Retour'}</button>
+          <button className={'ctl is-link' + (s.armed ? ' is-danger' : '')} onClick={resetPin}>
             {s.armed ? (s.hidden ? 'Effacer ' + plural(s.hidden, 'note', 'notes') + ' ?' : 'Confirmer ?') : 'Code oublié ?'}
           </button>
         </div>
@@ -193,7 +193,7 @@ function Remind() {
       <InlineForm autoFocus={false} button="Valider le rappel" onSubmit={v => setReminder(v ? new Date(v).getTime() : 0)}
         inputProps={{ type: 'datetime-local', 'aria-label': 'Date et heure du rappel' }} />
       {!!n.remind && !n.remindDone && (
-        <div className="layer-foot"><button className="text-btn" onClick={clearReminder}>Retirer</button><button className="text-btn" onClick={reminderToCalendar}>Ajouter à l’agenda</button></div>
+        <div className="layer-foot"><button className="ctl is-link" onClick={clearReminder}>Retirer</button><button className="ctl is-link" onClick={reminderToCalendar}>Ajouter à l’agenda</button></div>
       )}
     </>
   );

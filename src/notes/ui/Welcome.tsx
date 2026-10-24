@@ -50,13 +50,13 @@ export function Welcome() {
       <span className="sheet-grabber" aria-hidden="true" />
       <div className="sheet-head">
         <span className="dots" role="img" aria-label={`Étape ${step + 1} sur ${STEPS.length}`}>{STEPS.map((_, i) => <i key={i} data-on={i === step || undefined} />)}</span>
-        <button className="text-btn" onClick={() => endWelcome(false)}>Passer</button>
+        <button className="ctl is-link" onClick={() => endWelcome(false)}>Passer</button>
       </div>
       <div className="sheet-body welcome-body"><Step /></div>
       <div className="sheet-foot">
         {last
-          ? <><button className="btn" onClick={() => endWelcome(false)}>Commencer</button><button className="btn primary" id="welcome-next" onClick={() => endWelcome(true)}>Visite guidée</button></>
-          : <>{step > 0 && <button className="btn" onClick={() => setStep(step - 1)}>Retour</button>}<button className="btn primary" id="welcome-next" onClick={() => setStep(step + 1)}>Continuer</button></>}
+          ? <><button className="ctl is-l is-fill-strong" onClick={() => endWelcome(false)}>Commencer</button><button className="ctl is-l is-ink" id="welcome-next" onClick={() => endWelcome(true)}>Visite guidée</button></>
+          : <>{step > 0 && <button className="ctl is-l is-fill-strong" onClick={() => setStep(step - 1)}>Retour</button>}<button className="ctl is-l is-ink" id="welcome-next" onClick={() => setStep(step + 1)}>Continuer</button></>}
       </div>
     </Layer>
   );
@@ -91,9 +91,9 @@ export function Tour() {
         <h2 className="tour-title" id="tour-title">{step.title}</h2>
         <p className="tour-text" id="tour-text">{step.text.split('**').map((t, i) => (i % 2 ? <b key={i}>{t}</b> : t))}</p>
         <div className="tour-actions">
-          {!last && <button className="text-btn" onClick={endTour}>Passer</button>}
-          {index > 0 && <button className="text-btn push" onClick={() => tourStep(index - 1)}>Précédent</button>}
-          <button className={'btn primary' + (index > 0 ? '' : ' push')} id="tour-next" onClick={() => tourStep(index + 1)}>{last ? 'Terminer' : 'Suivant'}</button>
+          {!last && <button className="ctl is-link" onClick={endTour}>Passer</button>}
+          {index > 0 && <button className="ctl is-link push" onClick={() => tourStep(index - 1)}>Précédent</button>}
+          <button className={'ctl is-ink' + (index > 0 ? '' : ' push')} id="tour-next" onClick={() => tourStep(index + 1)}>{last ? 'Terminer' : 'Suivant'}</button>
         </div>
       </div>
     </div>

@@ -44,7 +44,7 @@ function Fab() {
     if (commit) d.hit?.click();
   };
   return (
-    <button className="fab" id="fab" aria-label="Créer : note, vocal, import" aria-haspopup="dialog" aria-expanded={open} title={finePointer() ? 'Créer (N : nouvelle note)' : undefined}
+    <button className="ctl is-xl is-icon is-accent fab" id="fab" aria-label="Créer : note, vocal, import" aria-haspopup="dialog" aria-expanded={open} title={finePointer() ? 'Créer (N : nouvelle note)' : undefined}
       onPointerDown={e => {
         if (e.button) return;
         e.currentTarget.setPointerCapture(e.pointerId);
@@ -73,7 +73,7 @@ function MainDock() {
   const at = s.home ? 0 : s.library ? 1 : s.settings ? 3 : -1;   // Recherche (2) is a mode, never a place
   /** A destination says where you are (aria-current); a panel says whether it is open (aria-pressed). */
   const tab = (id: string, icon: string, label: string, onClick: () => void, on: boolean, popup = false, keys = '') => (
-    <button className="tab-btn" id={id} onClick={onClick} title={keys && finePointer() ? `${label} (${keys})` : undefined}
+    <button className="ctl is-l is-stack tab-btn" id={id} onClick={onClick} title={keys && finePointer() ? `${label} (${keys})` : undefined}
       {...(popup ? { 'aria-pressed': on, 'aria-haspopup': 'dialog' as const } : { 'aria-current': on ? 'page' as const : undefined })}>
       <Icon name={icon} /><span>{label}</span>
     </button>
@@ -109,11 +109,11 @@ function SearchDock() {
     <div className="dock search-dock" role="search">
       <div className="search-chips" role="group" aria-label="Filtrer les résultats">
         {/* No "Tout" chip: no filter is the default; a filter chip toggles itself off */}
-        {kinds.map(k => <button key={k} className="chip glass" aria-pressed={s.kind === k} onClick={() => toggleKind(k)}><Icon name={KIND_ICON[k]} />{tabLabel(k)}</button>)}
-        {(s.query.trim() || s.kind) && <button className="chip glass is-quiet" onClick={saveCollection} aria-label="Enregistrer cette recherche comme collection"><Icon name="filter" />Enregistrer</button>}
+        {kinds.map(k => <button key={k} className="ctl is-s glass" aria-pressed={s.kind === k} onClick={() => toggleKind(k)}><Icon name={KIND_ICON[k]} />{tabLabel(k)}</button>)}
+        {(s.query.trim() || s.kind) && <button className="ctl is-s glass is-muted" onClick={saveCollection} aria-label="Enregistrer cette recherche comme collection"><Icon name="filter" />Enregistrer</button>}
         {recents.length > 0 && <span className="chip-group" role="group" aria-label="Recherches récentes">
-          {recents.map(r => <button key={r} className="chip glass is-quiet" onClick={() => { setQuery(r); input.current?.focus(); }} aria-label={'Rechercher ' + r}><Icon name="history" />{r}</button>)}
-          <button className="text-btn" onClick={clearRecents}>Effacer</button>
+          {recents.map(r => <button key={r} className="ctl is-s glass is-muted" onClick={() => { setQuery(r); input.current?.focus(); }} aria-label={'Rechercher ' + r}><Icon name="history" />{r}</button>)}
+          <button className="ctl is-link" onClick={clearRecents}>Effacer</button>
         </span>}
       </div>
       <div className="thumb-row">
@@ -122,9 +122,9 @@ function SearchDock() {
           <input id="search-input" ref={input} type="search" enterKeyHint="search" placeholder={'Rechercher dans ' + where} aria-label={'Rechercher dans ' + where}
             value={s.query} onChange={e => setQuery(e.target.value)} />
           {!s.query && finePointer() && <kbd className="kbd" title="Ouvre la recherche depuis l’accueil" aria-hidden="true">{MOD}K</kbd>}
-          {s.query && <button className="search-clear" onClick={() => { setQuery(''); input.current?.focus(); }} aria-label="Effacer la recherche"><Icon name="close" /></button>}
+          {s.query && <button className="ctl is-s is-icon is-fill" onClick={() => { setQuery(''); input.current?.focus(); }} aria-label="Effacer la recherche"><Icon name="close" /></button>}
         </label>
-        <button className="fab is-quiet" onClick={closeSearch} aria-label="Fermer la recherche"><Icon name="close" /></button>
+        <button className="ctl is-xl is-icon fab is-quiet" onClick={closeSearch} aria-label="Fermer la recherche"><Icon name="close" /></button>
       </div>
     </div>
   );
@@ -139,7 +139,7 @@ function SelectionDock() {
     };
   }));
   const none = !s.count;
-  const btn = (icon: string, label: string, aria: string, onClick: () => void, extra: React.ButtonHTMLAttributes<HTMLButtonElement> = {}, cls = 'action-btn') => (
+  const btn = (icon: string, label: string, aria: string, onClick: () => void, extra: React.ButtonHTMLAttributes<HTMLButtonElement> = {}, cls = 'ctl is-l is-stack') => (
     <button className={cls} onClick={onClick} aria-label={aria} {...extra}><Icon name={icon} /><span>{label}</span></button>
   );
   return (
@@ -147,7 +147,7 @@ function SelectionDock() {
       <div className="island glass sel-bar" role="toolbar" aria-label="Actions de sélection">
         {btn('selectAll', s.all ? 'Aucun' : 'Tout', s.all ? 'Tout désélectionner' : 'Tout sélectionner', selectAll, { 'aria-pressed': s.all, disabled: !s.total })}
         {btn('trash', s.armed ? 'Confirmer ?' : 'Supprimer', s.armed ? 'Confirmer la suppression de ' + plural(s.count, 'note', 'notes') : s.trash ? 'Supprimer définitivement la sélection' : 'Supprimer la sélection',
-          deleteSelection, { disabled: none }, 'action-btn danger' + (s.armed ? ' armed' : ''))}
+          deleteSelection, { disabled: none }, 'ctl is-l is-stack is-danger' + (s.armed ? ' is-armed' : ''))}
         {s.trash
           ? btn('restore', 'Restaurer', 'Restaurer la sélection', restoreSelection, { disabled: none })
           : <>
@@ -156,7 +156,7 @@ function SelectionDock() {
             {btn('more', 'Plus', 'Plus d’actions : déplacer, fusionner, partager', () => toggleLayer('sel-more'), { disabled: none, 'aria-haspopup': 'dialog', 'aria-expanded': s.more })}
           </>}
       </div>
-      <button className="fab is-quiet sel-count" onClick={endSelecting} aria-label={'Terminer la sélection (' + plural(s.count, 'note sélectionnée', 'notes sélectionnées') + ')'}>
+      <button className="ctl is-xl fab is-quiet sel-count" onClick={endSelecting} aria-label={'Terminer la sélection (' + plural(s.count, 'note sélectionnée', 'notes sélectionnées') + ')'}>
         <span aria-live="polite">{s.count}</span><Icon name="close" />
       </button>
     </nav>
@@ -170,8 +170,8 @@ function RecordingBar() {
     <div className="rec-bar island glass" role="status">
       <span className="rec-dot" aria-hidden="true" />
       <span>Enregistrement <b>{clock(Math.floor((Date.now() - started) / 1000))}</b></span>
-      <button className="icon-btn" onClick={cancelRecording} aria-label="Annuler l’enregistrement"><Icon name="close" /></button>
-      <button className="icon-btn stop" onClick={stopRecording} aria-label="Arrêter et garder"><Icon name="check" /></button>
+      <button className="ctl is-l is-icon" onClick={cancelRecording} aria-label="Annuler l’enregistrement"><Icon name="close" /></button>
+      <button className="ctl is-l is-icon is-accent" onClick={stopRecording} aria-label="Arrêter et garder"><Icon name="check" /></button>
     </div>
   );
 }
